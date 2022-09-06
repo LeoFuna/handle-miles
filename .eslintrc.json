@@ -1,3 +1,21 @@
 {
-  "extends": "next/core-web-vitals"
+  "extends": "next/core-web-vitals",
+  "rules": {
+    "no-duplicate-imports": "error",
+    "consistent-return": "error",
+    "array-bracket-spacing": "error",
+    "jsx-quotes": ["error", "prefer-single"],
+    "key-spacing": "error",
+    "comma-dangle": [
+      "error",
+      {
+        "arrays": "always-multiline",
+        "exports": "always-multiline",
+        "functions": "never",
+        "imports": "always-multiline",
+        "objects": "always-multiline"
+      }
+    ],
+    "semi": ["error", "always"]
+  }
 }
