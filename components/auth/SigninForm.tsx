@@ -1,5 +1,6 @@
 import { Box, Button, InputLabel, TextField } from "@mui/material";
 import Image from "next/image";
+import { signIn } from 'next-auth/react';
 import { Controller, useForm } from "react-hook-form";
 
 type SigninFormValues = {
@@ -16,7 +17,7 @@ function SigninForm() {
   });
 
   const onSubmit = (data: SigninFormValues) => {
-    console.log(data);
+    signIn('credentials', { ...data, callbackUrl: '/' });
   };
 
   return (
