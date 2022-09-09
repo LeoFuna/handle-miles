@@ -43,6 +43,7 @@ const authorize = async (credentials: LoginUser | undefined): Promise<User | nul
 export default NextAuth({
   providers: [
       CredentialsProviders({
+      id: 'credentials',
       name: 'Custom Credential',
       credentials: {
         email: { label: 'Email', type: 'text' },
@@ -60,7 +61,8 @@ export default NextAuth({
     maxAge,
   },
   pages: {
-    signIn: 'auth/signin',
+    signIn: '/auth/signin',
+    signOut: '/auth/signout',
   },
   callbacks: {
     async jwt({ token, user }) {
