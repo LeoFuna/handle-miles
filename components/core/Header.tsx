@@ -21,16 +21,18 @@ function Header({ title = 'Visão Geral' }) {
         </Box>
 
         <Box width='30vw' sx={{ display: 'flex', justifyContent: 'end' }}>
-          <IconButton onClick={handleOpenMenu}>
-            <Image width={50} height={50} alt='logo' src='/airplane-logo.png' />
-          </IconButton>
+          <Tooltip title='Menu'>
+            <IconButton onClick={handleOpenMenu}>
+              <Image width={50} height={50} alt='logo' src='/airplane-logo.png' />
+            </IconButton>
+          </Tooltip>
           <Menu
             anchorEl={anchorEl}
             open={open}
             onClose={handleCloseMenu}
           >
             <MenuItem>
-              <Typography>Teste</Typography>
+              <Typography>Opçao 1 Teste</Typography>
             </MenuItem>
           </Menu>
           <Tooltip title='Configurações'>
