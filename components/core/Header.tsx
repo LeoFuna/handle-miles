@@ -11,7 +11,7 @@ function Header({ title = 'Visão Geral' }) {
 
   return (
     <AppBar position='static'>
-      <Container maxWidth='xl' sx={{ height: '50px', display: 'flex', alignItems: 'center' }} >
+      <Box sx={{ height: '50px', display: 'flex', alignItems: 'center' }} >
         <Box width='30vw' sx={{ display: 'flex', justifyContent: 'start' }}>
           <Image width={50} height={50} alt='logo' src='/airplane-logo.png' />
         </Box>
@@ -41,7 +41,7 @@ function Header({ title = 'Visão Geral' }) {
             </IconButton>
           </Tooltip>
         </Box>
-      </Container>
+      </Box>
     </AppBar>
   );
 }
