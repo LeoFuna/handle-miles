@@ -1,4 +1,5 @@
 import Header from 'components/core/Header';
+import Dashboard from 'components/home/Dashboard';
 import type { NextPage } from 'next';
 import { useSession } from 'next-auth/react';
 import Head from 'next/head';
@@ -14,7 +15,7 @@ const Home: NextPage = () => {
         <link rel='icon' href='/favicon.ico' />
       </Head>
       <Header />
-      Home
+      <Dashboard />
     </div>
   );
 };
