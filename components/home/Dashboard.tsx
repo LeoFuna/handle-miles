@@ -7,15 +7,16 @@ const tableColumns: GridColumns = [
   { field: 'totalMiles', headerName: 'Total', flex: 1, headerAlign: 'center', align: 'center' },
   { field: 'average', headerName: 'Preço Médio', flex: 1, headerAlign: 'center', align: 'center' },
   { field: 'totalMoney', headerName: 'Total $', flex: 1, headerAlign: 'center', align: 'center' },
+  { field: 'projectedInvoicing', headerName: 'Faturamento', flex: 1, headerAlign: 'center', align: 'center' },
 ];
 
 const mockRows = [
-  { id: 1, company: 'Tudo Azul', totalMiles: 100000, average: '$ 17,50', totalMoney: 1750 },
-  { id: 2, company: 'Smiles', totalMiles: 100000, average: '$ 17,50', totalMoney: 1750 },
-  { id: 3, company: 'Latam', totalMiles: 100000, average: '$ 17,50', totalMoney: 1750 },
-  { id: 4, company: 'Livelo', totalMiles: 100000, average: '$ 17,50', totalMoney: 1750 },
-  { id: 5, company: 'Esfera', totalMiles: 100000, average: '$ 17,50', totalMoney: 1750 },
-  { id: 6, company: 'Pda', totalMiles: 100000, average: '$ 17,50', totalMoney: 1750 },
+  { id: 1, company: 'Tudo Azul', totalMiles: 100000, average: '$ 17,50', totalMoney: 1750, projectedInvoicing: 2050 },
+  { id: 2, company: 'Smiles', totalMiles: 100000, average: '$ 17,50', totalMoney: 1750, projectedInvoicing: 2050 },
+  { id: 3, company: 'Latam', totalMiles: 100000, average: '$ 17,50', totalMoney: 1750, projectedInvoicing: 2050 },
+  { id: 4, company: 'Livelo', totalMiles: 100000, average: '$ 17,50', totalMoney: 1750, projectedInvoicing: 2050 },
+  { id: 5, company: 'Esfera', totalMiles: 100000, average: '$ 17,50', totalMoney: 1750, projectedInvoicing: 2050 },
+  { id: 6, company: 'Pda', totalMiles: 100000, average: '$ 17,50', totalMoney: 1750, projectedInvoicing: 2050 },
 ];
 
 function Dashboard() {
@@ -28,6 +29,14 @@ function Dashboard() {
           </Typography>
           <Typography variant='h5'>
             R$ 50.000,00
+          </Typography>
+        </Box>
+        <Box display='flex' flexDirection='column' textAlign='center'>
+          <Typography variant='h3'>
+            Faturamento
+          </Typography>
+          <Typography variant='h5'>
+            R$ 60.000,00
           </Typography>
         </Box>
         <Box display='flex' flexDirection='column' textAlign='center'>
