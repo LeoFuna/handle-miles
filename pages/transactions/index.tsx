@@ -1,3 +1,4 @@
+import { Button } from "@mui/material";
 import { DataGrid, GridColumns } from "@mui/x-data-grid";
 import Header from "components/core/Header";
 
@@ -15,17 +16,31 @@ const mockRows = [
   { id: 2, date: '08/09/2022', company: 'Latam', totalMiles: 100000, averagePrice: '$ 17,50', type: '+' },
   { id: 3, date: '08/09/2022', company: 'PDA', totalMiles: 100000, averagePrice: '$ 17,50', type: '-' },
   { id: 4, date: '14/09/2022', company: 'Tudo Azul', totalMiles: 100000, averagePrice: '$ 17,50', type: '+' },
+  { id: 5, date: '06/09/2022', company: 'Tudo Azul', totalMiles: 100000, averagePrice: '$ 17,50', type: '+' },
+  { id: 6, date: '08/09/2022', company: 'Latam', totalMiles: 100000, averagePrice: '$ 17,50', type: '+' },
+  { id: 7, date: '08/09/2022', company: 'PDA', totalMiles: 100000, averagePrice: '$ 17,50', type: '-' },
+  { id: 8, date: '14/09/2022', company: 'Tudo Azul', totalMiles: 100000, averagePrice: '$ 17,50', type: '+' },
+  { id: 9, date: '06/09/2022', company: 'Tudo Azul', totalMiles: 100000, averagePrice: '$ 17,50', type: '+' },
+  { id: 10, date: '08/09/2022', company: 'Latam', totalMiles: 100000, averagePrice: '$ 17,50', type: '+' },
+  { id: 11, date: '08/09/2022', company: 'PDA', totalMiles: 100000, averagePrice: '$ 17,50', type: '-' },
+  { id: 12, date: '14/09/2022', company: 'Tudo Azul', totalMiles: 100000, averagePrice: '$ 17,50', type: '+' },
 ];
 
 function Transactions() {
   return(
     <>
       <Header />
+      <Button 
+        variant='outlined' 
+        sx={{ m: 2 }}
+        onClick={ () => console.log('Abre modal pra criaçao de Transação!')}
+      >Criar</Button>
       <DataGrid
         autoHeight
         rows={mockRows}
         columns={tableColumns}
         rowsPerPageOptions={[8]}
+        pageSize={10}
       />
     </>
   );
