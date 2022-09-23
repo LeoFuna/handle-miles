@@ -3,7 +3,6 @@ import { DataGrid, GridColumns } from "@mui/x-data-grid";
 import Header from "components/core/Header";
 import { useTransactions } from "hooks/transactions-hooks";
 import { useSession } from "next-auth/react";
-import { useEffect } from "react";
 
 const tableColumns: GridColumns = [
   // { field: 'id', headerName: 'ID', width: 60, headerAlign: 'center', align: 'center' },
@@ -12,21 +11,6 @@ const tableColumns: GridColumns = [
   { field: 'totalMiles', headerName: 'Total', flex: 1, headerAlign: 'center', align: 'center' },
   { field: 'averagePrice', headerName: 'Preço Médio', flex: 1, headerAlign: 'center', align: 'center' },
   { field: 'type', headerName: '', width: 60, headerAlign: 'center', align: 'center' },
-];
-
-const mockRows = [
-  { id: 1, date: '06/09/2022', company: 'Tudo Azul', totalMiles: 100000, averagePrice: '$ 17,50', type: '+' },
-  { id: 2, date: '08/09/2022', company: 'Latam', totalMiles: 100000, averagePrice: '$ 17,50', type: '+' },
-  { id: 3, date: '08/09/2022', company: 'PDA', totalMiles: 100000, averagePrice: '$ 17,50', type: '-' },
-  { id: 4, date: '14/09/2022', company: 'Tudo Azul', totalMiles: 100000, averagePrice: '$ 17,50', type: '+' },
-  { id: 5, date: '06/09/2022', company: 'Tudo Azul', totalMiles: 100000, averagePrice: '$ 17,50', type: '+' },
-  { id: 6, date: '08/09/2022', company: 'Latam', totalMiles: 100000, averagePrice: '$ 17,50', type: '+' },
-  { id: 7, date: '08/09/2022', company: 'PDA', totalMiles: 100000, averagePrice: '$ 17,50', type: '-' },
-  { id: 8, date: '14/09/2022', company: 'Tudo Azul', totalMiles: 100000, averagePrice: '$ 17,50', type: '+' },
-  { id: 9, date: '06/09/2022', company: 'Tudo Azul', totalMiles: 100000, averagePrice: '$ 17,50', type: '+' },
-  { id: 10, date: '08/09/2022', company: 'Latam', totalMiles: 100000, averagePrice: '$ 17,50', type: '+' },
-  { id: 11, date: '08/09/2022', company: 'PDA', totalMiles: 100000, averagePrice: '$ 17,50', type: '-' },
-  { id: 12, date: '14/09/2022', company: 'Tudo Azul', totalMiles: 100000, averagePrice: '$ 17,50', type: '+' },
 ];
 
 function Transactions() {
