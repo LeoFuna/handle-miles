@@ -30,6 +30,20 @@ const serializeAccounts = (accounts: UserAccountsSWR) => accounts.data?.accounts
   return accountFormatedToRender;
 });
 
+const buildMainHeaderData = (accounts: UserAccountsSWR) => {
+  return accounts.data?.accounts.reduce((prev, current) => {
+    prev.totalInvested += current.averagePrice * (current.totalMiles/1000);
+    if (conditionsEnum.IS_POINTS(current.company)) {
+      prev.totalPoints += current.totalMiles;
+      prev.projectedInvoice += (current.totalMiles/1000) * averageSellPrice.POINTS; 
+    } else {
+      prev.totalMiles += current.totalMiles;
+      prev.projectedInvoice += (current.totalMiles/1000) * averageSellPrice.MILES;
+    }
+    return prev;
+  }, { totalInvested: 0, projectedInvoice: 0, totalMiles: 0, totalPoints: 0 });
+};
+
 function Dashboard({ userId }: { userId?: string }) {
   const accounts = useUserAccounts({ userId });
 
@@ -41,7 +55,7 @@ function Dashboard({ userId }: { userId?: string }) {
             Total Investido
           </Typography>
           <Typography variant='h5'>
-            R$ 50.000,00
+            {`R$ ${buildMainHeaderData(accounts)?.totalInvested.toFixed(2) || ''}`}
           </Typography>
         </Box>
         <Box display='flex' flexDirection='column' textAlign='center'>
@@ -49,7 +63,7 @@ function Dashboard({ userId }: { userId?: string }) {
             Faturamento
           </Typography>
           <Typography variant='h5'>
-            R$ 60.000,00
+            {`R$ ${buildMainHeaderData(accounts)?.projectedInvoice.toFixed(2) || ''}`}
           </Typography>
         </Box>
         <Box display='flex' flexDirection='column' textAlign='center'>
@@ -57,7 +71,7 @@ function Dashboard({ userId }: { userId?: string }) {
             Total de Milhas
           </Typography>
           <Typography variant='h5'>
-            200.000
+            { `${buildMainHeaderData(accounts)?.totalMiles || ''}` }
           </Typography>
         </Box>
         <Box display='flex' flexDirection='column' textAlign='center'>
@@ -65,7 +79,7 @@ function Dashboard({ userId }: { userId?: string }) {
             Total de Pontos
           </Typography>
           <Typography variant='h5'>
-            120.000
+            { `${buildMainHeaderData(accounts)?.totalPoints || ''}` }
           </Typography>
         </Box>
       </Box>
