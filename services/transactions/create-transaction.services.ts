@@ -12,7 +12,8 @@ type TransactionType = {
   note: string,
 }
 
-const createTransactionService = async (transaction: any): Promise<TransactionType> => {
+const createTransactionService = async (transaction: TransactionType): Promise<TransactionType> => {
+  transaction.averagePrice = parseFloat(transaction.averagePrice.toFixed(2));
   const collectionRef = collection(db, 'transactions');
   await addDoc(collectionRef, transaction);
   const { totalMiles, averagePrice, type, userId, companyId } = transaction;

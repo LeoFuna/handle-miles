@@ -25,7 +25,7 @@ function calcNewAccountValues(type: string, totalMiles: number, averagePrice: nu
   if (type === '+') {
     const totalPrice = (newAccount.totalMiles / 1000) * newAccount.averagePrice + (totalMiles/1000) * averagePrice;
     newAccount.totalMiles += totalMiles;
-    newAccount.averagePrice = totalPrice / (newAccount.totalMiles/1000);
+    newAccount.averagePrice = parseFloat((totalPrice / (newAccount.totalMiles/1000)).toFixed(2));
     return newAccount;
   }
   newAccount.totalMiles -= totalMiles;
