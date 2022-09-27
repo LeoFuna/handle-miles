@@ -1,4 +1,5 @@
 import useApi from 'hooks/use-api';
+import fetcher from 'utils/fetcher';
 
 type TransactionsParams = {
   userId?: string,
@@ -12,6 +13,7 @@ type Transaction = {
   totalMiles: number,
   type: string,
   userId: string,
+  note: string,
 }
 
 type TransactionsSWR = {
@@ -28,3 +30,9 @@ export const useTransactions = (params: TransactionsParams): TransactionsSWR => 
   return transactions;
 };
 
+export const useCreateTransaction = (payload: any): any => {
+  return fetcher('/api/transactions', {
+    method: 'POST',
+    body: JSON.stringify(payload),
+  });
+};
