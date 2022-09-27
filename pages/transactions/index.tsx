@@ -12,6 +12,7 @@ const tableColumns: GridColumns = [
   { field: 'company', headerName: 'Programa', flex: 1, headerAlign: 'center', align: 'center' },
   { field: 'totalMiles', headerName: 'Total', flex: 1, headerAlign: 'center', align: 'center' },
   { field: 'averagePrice', headerName: 'Preço Médio', flex: 1, headerAlign: 'center', align: 'center' },
+  { field: 'note', headerName: 'Descrição', flex: 1, headerAlign: 'center', align: 'center' },
   { field: 'type', headerName: '', width: 60, headerAlign: 'center', align: 'center' },
 ];
 
@@ -34,6 +35,7 @@ function Transactions() {
       </Button>
       <TransactionsModal
         open={openModal}
+        userId={userId}
       />
       <DataGrid
         autoHeight
