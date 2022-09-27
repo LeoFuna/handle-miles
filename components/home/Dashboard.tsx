@@ -1,25 +1,38 @@
 import { Box, Typography } from "@mui/material";
 import { DataGrid, GridColumns } from "@mui/x-data-grid";
+import { UserAccountsSWR, useUserAccounts } from "hooks/accounts-hooks";
+
+const averageSellPrice = { MILES: 20, POINTS: 40 };
+const conditionsEnum = {
+  IS_POINTS: (companyName: string): boolean => ['Esfera', 'Livelo', 'PDA'].includes(companyName),
+};
 
 const tableColumns: GridColumns = [
-  { field: 'id', headerName: 'ID', width: 60, headerAlign: 'center', align: 'center' },
   { field: 'company', headerName: '', flex: 1, align: 'center' },
-  { field: 'totalMiles', headerName: 'Total', flex: 1, headerAlign: 'center', align: 'center' },
-  { field: 'average', headerName: 'Preço Médio', flex: 1, headerAlign: 'center', align: 'center' },
-  { field: 'totalMoney', headerName: 'Total $', flex: 1, headerAlign: 'center', align: 'center' },
-  { field: 'projectedInvoicing', headerName: 'Faturamento', flex: 1, headerAlign: 'center', align: 'center' },
+  { field: 'totalMiles', headerName: 'Total de Pontos', flex: 1, headerAlign: 'center', align: 'center' },
+  { field: 'averagePrice', headerName: 'Preço Médio', flex: 1, headerAlign: 'center', align: 'center' },
+  { field: 'totalMoney', headerName: 'Total Investido', flex: 1, headerAlign: 'center', align: 'center' },
+  { field: 'projectedInvoicing', headerName: 'Faturamento Previsto', flex: 1, headerAlign: 'center', align: 'center' },
 ];
 
-const mockRows = [
-  { id: 1, company: 'Tudo Azul', totalMiles: 100000, average: '$ 17,50', totalMoney: 1750, projectedInvoicing: 2050 },
-  { id: 2, company: 'Smiles', totalMiles: 100000, average: '$ 17,50', totalMoney: 1750, projectedInvoicing: 2050 },
-  { id: 3, company: 'Latam', totalMiles: 100000, average: '$ 17,50', totalMoney: 1750, projectedInvoicing: 2050 },
-  { id: 4, company: 'Livelo', totalMiles: 100000, average: '$ 17,50', totalMoney: 1750, projectedInvoicing: 2050 },
-  { id: 5, company: 'Esfera', totalMiles: 100000, average: '$ 17,50', totalMoney: 1750, projectedInvoicing: 2050 },
-  { id: 6, company: 'Pda', totalMiles: 100000, average: '$ 17,50', totalMoney: 1750, projectedInvoicing: 2050 },
-];
+const serializeAccounts = (accounts: UserAccountsSWR) => accounts.data?.accounts.map((account) => {
+  const { averagePrice, ...rest } = account;
+  const accountFormatedToRender = { ...rest, averagePrice: '', totalMoney: '', projectedInvoicing: '' };
+  accountFormatedToRender.averagePrice = `R$ ${averagePrice}`;
+  accountFormatedToRender.totalMoney = `R$ ${parseFloat((averagePrice * (account.totalMiles / 1000)).toFixed(2))}`;
+  conditionsEnum.IS_POINTS(account.company) ?
+    accountFormatedToRender.projectedInvoicing = `
+    R$ ${parseFloat((averageSellPrice.POINTS * (account.totalMiles / 1000)).toFixed(2))}
+    ` :
+    accountFormatedToRender.projectedInvoicing = `
+    R$ ${parseFloat((averageSellPrice.MILES * (account.totalMiles / 1000)).toFixed(2))}
+    `;
+  return accountFormatedToRender;
+});
 
-function Dashboard() {
+function Dashboard({ userId }: { userId?: string }) {
+  const accounts = useUserAccounts({ userId });
+
   return (
     <Box flexDirection='column' justifyContent='center' display='flex'>
       <Box display='flex' justifyContent='space-evenly' m={5} >
@@ -56,10 +69,9 @@ function Dashboard() {
           </Typography>
         </Box>
       </Box>
-
       <DataGrid
         autoHeight
-        rows={mockRows}
+        rows={serializeAccounts(accounts) || []}
         columns={tableColumns}
         rowsPerPageOptions={[8]}
       />
