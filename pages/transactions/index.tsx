@@ -36,6 +36,7 @@ function Transactions() {
       <TransactionsModal
         open={openModal}
         userId={userId}
+        setOpen={setOpenModal}
       />
       <DataGrid
         autoHeight
