@@ -1,36 +1,44 @@
-import { Modal, Box, Typography, TextField, Autocomplete, Select, MenuItem, Button } from "@mui/material";
+import { Modal, Box, Typography, TextField, Autocomplete, Select, MenuItem, Button, InputAdornment } from "@mui/material";
 import { LocalizationProvider, DesktopDatePicker } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { useCompanies } from "hooks/companies-hooks";
+import { useCreateTransaction } from "hooks/transactions-hooks";
 import { Controller, useForm } from "react-hook-form";
 
 type TransactionsModalTypes = {
   open: boolean;
+  userId?: string
 }
 
 type TransactionsFormTypes = {
-  averagePrice: number;
   company: string;
   date: Date | null;
-  totalMiles: number,
-  totalMoney: number,
+  totalMiles: string,
+  totalMoney: string,
   type: string,
+  note: string,
 }
 
-const onSubmit = (formData: TransactionsFormTypes): void => {
-  console.log(formData);
+const calcAveragePrice = (miles: number, total: number): number => {
+  return (total / (miles / 1000));
 };
 
-function TransactionsModal({ open }: TransactionsModalTypes) {
+const onSubmit = async (formData: TransactionsFormTypes, userId: string): Promise<void> => {
+  const averagePrice = calcAveragePrice(parseInt(formData.totalMiles), parseFloat(formData.totalMoney));
+  const { totalMoney, totalMiles, ...rest } = formData;
+  await useCreateTransaction({ ...rest, averagePrice, totalMiles: parseInt(totalMiles), userId });
+};
+
+function TransactionsModal({ open, userId }: TransactionsModalTypes) {
   const companies = useCompanies();
-  const { control, getValues, setValue, handleSubmit, watch } = useForm<TransactionsFormTypes>({
+  const { control, setValue, handleSubmit, watch } = useForm<TransactionsFormTypes>({
     defaultValues: {
-      averagePrice: 0,
       company: '',
       date: new Date(),
-      totalMiles: 0,
-      totalMoney: 0,
+      totalMiles: '',
+      totalMoney: '',
       type: '',
+      note: '',
     },
   });
 
@@ -45,9 +53,9 @@ function TransactionsModal({ open }: TransactionsModalTypes) {
         <Typography textAlign='center' variant='h4'>Criação de Transação</Typography>
         <Box display='flex' alignItems='center' width='90%'>
           <Box width='25%'>
-            <Typography display='block' width='10%'>Companhia: </Typography>
+            <Typography textAlign='center'>Companhia: </Typography>
           </Box>
-          <Box width='75%' m={1} >
+          <Box width='75%' m={1}>
             <Autocomplete
               options={companies.data?.companies || []}
               getOptionLabel={(option) => option.name}
@@ -58,7 +66,7 @@ function TransactionsModal({ open }: TransactionsModalTypes) {
         </Box>
         <Box display='flex' alignItems='center' width='90%'>
           <Box width='25%'>
-            <Typography>Milhas/Pontos: </Typography>
+            <Typography textAlign='center'>Milhas/Pontos: </Typography>
           </Box>
           <Box width='75%' m={1} >
             <Controller
@@ -72,7 +80,7 @@ function TransactionsModal({ open }: TransactionsModalTypes) {
         </Box>
         <Box display='flex' alignItems='center' width='90%'>
           <Box width='25%'>
-            <Typography>Tipo de Operação: </Typography>
+            <Typography textAlign='center'>Tipo de Operação: </Typography>
           </Box>
           <Box width='75%' m={1} >
             <Controller
@@ -92,21 +100,28 @@ function TransactionsModal({ open }: TransactionsModalTypes) {
         </Box>
         <Box display='flex' alignItems='center' width='90%'>
           <Box width='25%'>
-            <Typography>Total: </Typography>
+            <Typography textAlign='center'>Total: </Typography>
           </Box>
           <Box width='75%' m={1} >
             <Controller
               name='totalMoney'
               control={control}
               render={({ field }) => (
-                <TextField {...field} placeholder='Digite total em R$' type='number' fullWidth />
+                <TextField
+                  {...field}
+                  type='number'
+                  fullWidth
+                  InputProps={{
+                    startAdornment: <InputAdornment position='start'>R$</InputAdornment>,
+                  }}
+                />
               )}
             />
           </Box>
         </Box>
         <Box display='flex' alignItems='center' width='90%'>
           <Box width='25%'>
-            <Typography>Dia da Transação: </Typography>
+            <Typography textAlign='center'>Dia da Transação: </Typography>
           </Box>
           <Box width='75%' m={1} >
             <LocalizationProvider dateAdapter={AdapterDateFns} >
@@ -119,7 +134,21 @@ function TransactionsModal({ open }: TransactionsModalTypes) {
             </LocalizationProvider>
           </Box>
         </Box>
-        <Button type='submit' onClick={handleSubmit(onSubmit)}>Criar</Button>
+        <Box display='flex' alignItems='center' width='90%'>
+          <Box width='25%'>
+            <Typography textAlign='center'>Descrição: </Typography>
+          </Box>
+          <Box width='75%' m={1} >
+            <Controller
+              name='note'
+              control={control}
+              render={({ field }) => (
+                <TextField {...field} placeholder='Motivo da transação' fullWidth />
+              )}
+            />
+          </Box>
+        </Box>
+        <Button type='submit' onClick={handleSubmit((form: TransactionsFormTypes) => onSubmit(form, userId))}>Criar</Button>
       </Box>
     </Modal>
   );
