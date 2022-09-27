@@ -7,6 +7,7 @@ import styles from '../styles/Home.module.css';
 
 const Home: NextPage = () => {
   const session = useSession();
+  const userId = (typeof session.data?.id === 'string') ? session.data?.id : undefined;
   if (session.status !== 'authenticated') return <h1>Usuário não autenticado!</h1>;
   return (
     <div className={styles.container}>
@@ -15,7 +16,9 @@ const Home: NextPage = () => {
         <link rel='icon' href='/favicon.ico' />
       </Head>
       <Header />
-      <Dashboard />
+      <Dashboard
+        userId={ userId }
+      />
     </div>
   );
 };

@@ -10,9 +10,10 @@ type Account = {
   totalMiles: number;
   userId: string;
   id: string;
+  company: string;
 }
 
-type UserAccountsSWR = {
+export type UserAccountsSWR = {
   data?: {
     accounts: Account[];
   };
@@ -20,7 +21,9 @@ type UserAccountsSWR = {
   isValidating: boolean;
 }
 
-export const useUserAccounts = (params: UserAccountsParamsType): UserAccountsSWR => {
+type UserAccountType = (params: UserAccountsParamsType) => UserAccountsSWR
+
+export const useUserAccounts: UserAccountType = (params: UserAccountsParamsType): UserAccountsSWR => {
   const stringParams = new URLSearchParams(params);
   const accounts = useApi(`/api/accounts?${stringParams}`);
   return accounts;
