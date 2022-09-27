@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import { Modal, Box, Typography, TextField, Autocomplete, Select, MenuItem, Button, InputAdornment } from "@mui/material";
 import { LocalizationProvider, DesktopDatePicker } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
@@ -11,7 +12,7 @@ type TransactionsModalTypes = {
 }
 
 type TransactionsFormTypes = {
-  company: string;
+  companyId: string;
   date: Date | null;
   totalMiles: string,
   totalMoney: string,
@@ -23,7 +24,7 @@ const calcAveragePrice = (miles: number, total: number): number => {
   return (total / (miles / 1000));
 };
 
-const onSubmit = async (formData: TransactionsFormTypes, userId: string): Promise<void> => {
+const onSubmit = async (formData: TransactionsFormTypes, userId?: string): Promise<void> => {
   const averagePrice = calcAveragePrice(parseInt(formData.totalMiles), parseFloat(formData.totalMoney));
   const { totalMoney, totalMiles, ...rest } = formData;
   await useCreateTransaction({ ...rest, averagePrice, totalMiles: parseInt(totalMiles), userId });
@@ -33,7 +34,7 @@ function TransactionsModal({ open, userId }: TransactionsModalTypes) {
   const companies = useCompanies();
   const { control, setValue, handleSubmit, watch } = useForm<TransactionsFormTypes>({
     defaultValues: {
-      company: '',
+      companyId: '',
       date: new Date(),
       totalMiles: '',
       totalMoney: '',
@@ -59,7 +60,7 @@ function TransactionsModal({ open, userId }: TransactionsModalTypes) {
             <Autocomplete
               options={companies.data?.companies || []}
               getOptionLabel={(option) => option.name}
-              onChange={(_event, newValue) => setValue('company', newValue?.name || '')}
+              onChange={(_event, newValue) => setValue('companyId', newValue?.id || '')}
               renderInput={(params) => <TextField {...params} placeholder='Digite a companhia' fullWidth />}
             />
           </Box>

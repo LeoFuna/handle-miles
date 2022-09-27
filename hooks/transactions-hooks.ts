@@ -14,6 +14,7 @@ type Transaction = {
   type: string,
   userId: string,
   note: string,
+  companyId: string,
 }
 
 type TransactionsSWR = {
