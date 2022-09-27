@@ -4,7 +4,7 @@ import updateAccountService from "services/accounts/update-account.services";
 
 type TransactionType = {
   averagePrice: number,
-  company: string,
+  companyId: string,
   date: Date,
   totalMiles: number,
   type: string,
@@ -15,9 +15,8 @@ type TransactionType = {
 const createTransactionService = async (transaction: any): Promise<TransactionType> => {
   const collectionRef = collection(db, 'transactions');
   await addDoc(collectionRef, transaction);
-  const { totalMiles, averagePrice, type, userId } = transaction;
-  await updateAccountService(userId, { companyId: 'Q57tEgqh8Fc1jEUDqe2L', totalMiles, averagePrice, type });
-  // PRECISAR TRAZER COMPANY ID AQUI, TA VINDO SOMENTE O NAME DA COMPANHIA!!!
+  const { totalMiles, averagePrice, type, userId, companyId } = transaction;
+  await updateAccountService(userId, { companyId, totalMiles, averagePrice, type });
   return transaction;
 };
 
