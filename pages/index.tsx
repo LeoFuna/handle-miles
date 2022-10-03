@@ -7,7 +7,9 @@ import styles from '../styles/Home.module.css';
 
 const Home: NextPage = () => {
   const session = useSession();
-  const userId = (typeof session.data?.id === 'string') ? session.data?.id : undefined;
+  const userId = (typeof session.data?.id === 'string') ? session.data?.id : '';
+  const familyId = (typeof session.data?.familyId === 'string') ? session.data.familyId : '';
+  const name = (typeof session.data?.name === 'string') ? session.data.name : '';
   if (session.status !== 'authenticated') return <h1>Usuário não autenticado!</h1>;
   return (
     <div className={styles.container}>
@@ -18,6 +20,8 @@ const Home: NextPage = () => {
       <Header />
       <Dashboard
         userId={ userId }
+        familyId={ familyId }
+        name={name}
       />
     </div>
   );

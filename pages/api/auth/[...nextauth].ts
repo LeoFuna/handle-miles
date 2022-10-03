@@ -15,6 +15,7 @@ type LoginUser = {
 type User = {
   id: string,
   name: string,
+  familyId: string,
 }
 
 const authorize = async (credentials: LoginUser | undefined): Promise<User | null> => {
@@ -28,9 +29,9 @@ const authorize = async (credentials: LoginUser | undefined): Promise<User | nul
 
     if (!userDoc) throw new Error('Invalid User!');
     if (await bcrypt.compare(credentials.password, userDoc.data().password)) {
-      const { name } = userDoc.data();
+      const { name, familyId } = userDoc.data();
 
-      return { id: userDoc.id, name };
+      return { id: userDoc.id, name, familyId };
     }
 
     throw new Error('Invalid Credentials!');
@@ -69,6 +70,7 @@ export default NextAuth({
       if (user) {
         token.id = user.id;
         token.name = user.name;
+        token.familyId = user.familyId;
       }
       return token;
     },
@@ -76,6 +78,7 @@ export default NextAuth({
       if (token) {
         session.id = token.id;
         session.name = token.name;
+        session.familyId = token.familyId;
       }
       return session;
     },
