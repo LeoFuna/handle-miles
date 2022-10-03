@@ -1,6 +1,8 @@
-import { Box, Typography } from "@mui/material";
+import { Box, MenuItem, Select, Typography } from "@mui/material";
 import { DataGrid, GridColumns } from "@mui/x-data-grid";
 import { UserAccountsSWR, useUserAccounts } from "hooks/accounts-hooks";
+import { useUsersByFamily } from "hooks/users-hooks";
+import { useState } from "react";
 
 const averageSellPrice = { MILES: 20, POINTS: 40 };
 const conditionsEnum = {
@@ -32,20 +34,23 @@ const serializeAccounts = (accounts: UserAccountsSWR) => accounts.data?.accounts
 
 const buildMainHeaderData = (accounts: UserAccountsSWR) => {
   return accounts.data?.accounts.reduce((prev, current) => {
-    prev.totalInvested += current.averagePrice * (current.totalMiles/1000);
+    prev.totalInvested += current.averagePrice * (current.totalMiles / 1000);
     if (conditionsEnum.IS_POINTS(current.company)) {
       prev.totalPoints += current.totalMiles;
-      prev.projectedInvoice += (current.totalMiles/1000) * averageSellPrice.POINTS; 
+      prev.projectedInvoice += (current.totalMiles / 1000) * averageSellPrice.POINTS;
     } else {
       prev.totalMiles += current.totalMiles;
-      prev.projectedInvoice += (current.totalMiles/1000) * averageSellPrice.MILES;
+      prev.projectedInvoice += (current.totalMiles / 1000) * averageSellPrice.MILES;
     }
     return prev;
   }, { totalInvested: 0, projectedInvoice: 0, totalMiles: 0, totalPoints: 0 });
 };
 
-function Dashboard({ userId }: { userId?: string }) {
-  const accounts = useUserAccounts({ userId });
+function Dashboard({ userId, familyId, name }: { userId: string, familyId: string, name: string }) {
+  const [selectedAccount, setSelectedAccount] = useState(name);
+
+  const familyUsers = useUsersByFamily({ familyId, name });
+  const accounts = useUserAccounts({ userId: familyUsers.data?.users.find((user: any) => user.name === selectedAccount).id || '' });
 
   return (
     <Box flexDirection='column' justifyContent='center' display='flex'>
@@ -71,7 +76,7 @@ function Dashboard({ userId }: { userId?: string }) {
             Total de Milhas
           </Typography>
           <Typography variant='h5'>
-            { `${buildMainHeaderData(accounts)?.totalMiles || ''}` }
+            {`${buildMainHeaderData(accounts)?.totalMiles || ''}`}
           </Typography>
         </Box>
         <Box display='flex' flexDirection='column' textAlign='center'>
@@ -79,9 +84,19 @@ function Dashboard({ userId }: { userId?: string }) {
             Total de Pontos
           </Typography>
           <Typography variant='h5'>
-            { `${buildMainHeaderData(accounts)?.totalPoints || ''}` }
+            {`${buildMainHeaderData(accounts)?.totalPoints || ''}`}
           </Typography>
         </Box>
+      </Box>
+      <Box>
+        <Select
+          value={selectedAccount}
+          onChange={(event) => setSelectedAccount(event.target.value)}
+        >
+          {familyUsers.data?.users.map(
+            (user: any) => <MenuItem key={user.id} value={user.name}>{user.name}</MenuItem>)
+          }
+        </Select>
       </Box>
       <DataGrid
         autoHeight
