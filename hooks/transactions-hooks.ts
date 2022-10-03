@@ -5,7 +5,7 @@ type TransactionsParams = {
   userId?: string,
 }
 
-type Transaction = {
+export type Transaction = {
   averagePrice: number,
   company: string,
   date: string,
