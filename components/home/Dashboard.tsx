@@ -76,15 +76,15 @@ function Dashboard({ userId, familyId, name }: { userId: string, familyId: strin
             Total de Milhas
           </Typography>
           <Typography variant='h5'>
-            {`${buildMainHeaderData(accounts)?.totalMiles || ''}`}
+            {`${buildMainHeaderData(accounts)?.totalMiles }`}
           </Typography>
         </Box>
         <Box display='flex' flexDirection='column' textAlign='center'>
           <Typography variant='h3'>
             Total de Pontos
-          </Typography>
+          </Typography> 
           <Typography variant='h5'>
-            {`${buildMainHeaderData(accounts)?.totalPoints || ''}`}
+            {`${buildMainHeaderData(accounts)?.totalPoints}`}
           </Typography>
         </Box>
       </Box>
