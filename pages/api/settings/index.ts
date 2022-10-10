@@ -2,6 +2,7 @@ import { db } from "db/firebase";
 import express from "express";
 import { collection, DocumentData, getDocs, query, where } from "firebase/firestore";
 import listCompaniesService from "services/companies/list-companies.services";
+import createSettingService from "services/settings/create-setting.service";
 import updateSettingsService from "services/settings/update-settings.services";
 
 const app = express();
@@ -34,6 +35,11 @@ app.get('/api/settings', async (req: express.Request, res: express.Response) => 
 app.put('/api/settings', async (req: express.Request, res: express.Response) => {
   const updateResponse = await updateSettingsService(JSON.parse(req.body));
   res.json(updateResponse);
+});
+
+app.post('/api/settings', async (req, res) => {
+  const createResponse = await createSettingService(req.body);
+  res.json(createResponse);
 });
 
 export default app;
