@@ -39,6 +39,9 @@ function Header({ title = 'Visão Geral' }) {
             <MenuItem onClick={() => router.push('/transactions')}>
               <Typography>Movimentações</Typography>
             </MenuItem>
+            <MenuItem onClick={() => router.push('/settings')}>
+              <Typography>Configurações</Typography>
+            </MenuItem>
           </Menu>
           <Tooltip title='Configurações'>
             <IconButton sx={{ p: 0 }}>
