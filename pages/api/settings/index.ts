@@ -2,6 +2,7 @@ import { db } from "db/firebase";
 import express from "express";
 import { collection, DocumentData, getDocs, query, where } from "firebase/firestore";
 import listCompaniesService from "services/companies/list-companies.services";
+import updateSettingsService from "services/settings/update-settings.services";
 
 const app = express();
 
@@ -28,6 +29,11 @@ app.get('/api/settings', async (req: express.Request, res: express.Response) => 
   });
 
   res.json({ exchangeConfigs });
+});
+
+app.put('/api/settings', async (req: express.Request, res: express.Response) => {
+  const updateResponse = await updateSettingsService(req.body);
+  res.json(updateResponse);
 });
 
 export default app;
