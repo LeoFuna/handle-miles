@@ -21,14 +21,14 @@ const tableColumns: GridColumns = [
 const serializeAccounts = (accounts: UserAccountsSWR, companiesSettings: any) => accounts.data?.accounts.map((account) => {
   const { averagePrice, ...rest } = account;
   const accountFormatedToRender = { ...rest, averagePrice: '', totalMoney: '', projectedInvoicing: '' };
-  accountFormatedToRender.averagePrice = `R$ ${averagePrice}`;
-  accountFormatedToRender.totalMoney = `R$ ${parseFloat((averagePrice * (account.totalMiles / 1000)).toFixed(2))}`;
+  accountFormatedToRender.averagePrice = `R$ ${averagePrice.toFixed(2)}`;
+  accountFormatedToRender.totalMoney = `R$ ${(averagePrice * (account.totalMiles / 1000)).toFixed(2)}`;
 
   const sellAveragePrice = companiesSettings.data?.exchangeConfigs
   .find((settings: any) => settings.companyId === account.companyId).sellAveragePrice;
 
   accountFormatedToRender.projectedInvoicing = `
-    R$ ${parseFloat((sellAveragePrice * (account.totalMiles / 1000)).toFixed(2))}
+    R$ ${(sellAveragePrice * (account.totalMiles / 1000)).toFixed(2)}
   `;
 
   return accountFormatedToRender;
@@ -109,6 +109,7 @@ function Dashboard({ familyId, name }: { userId: string, familyId: string, name:
         rows={serializeAccounts(accounts, companiesSettings) || []}
         columns={tableColumns}
         rowsPerPageOptions={[8]}
+        style={{ fontSize: '1.7em' }}
       />
     </Box>
   );

@@ -1,7 +1,8 @@
-import { AppBar, Avatar, Box, Container, IconButton, Menu, MenuItem, Tooltip, Typography } from "@mui/material";
+import { AppBar, Avatar, Box, IconButton, Menu, MenuItem, Tooltip, Typography } from "@mui/material";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useState, MouseEvent } from "react";
+import { MenuBook } from "@mui/icons-material";
 
 function Header({ title = 'Visão Geral' }) {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -25,7 +26,7 @@ function Header({ title = 'Visão Geral' }) {
         <Box width='30vw' sx={{ display: 'flex', justifyContent: 'end' }}>
           <Tooltip title='Menu'>
             <IconButton onClick={handleOpenMenu}>
-              <Image width={50} height={50} alt='logo' src='/airplane-logo.png' />
+              <MenuBook />
             </IconButton>
           </Tooltip>
           <Menu
