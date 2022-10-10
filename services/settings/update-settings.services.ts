@@ -1,12 +1,12 @@
 import { db } from "db/firebase";
 import { updateDoc, doc } from "firebase/firestore";
 
-const updateSettingsService = async ({ configId, sellAveragePrice }: any) => {
-  const exchangeConfigsRef = doc(db, 'exchangeConfigs', `${configId}`);
+const updateSettingsService = async ({ settingsId, sellAveragePrice }: any) => {
+  const exchangeConfigsRef = doc(db, 'exchangeConfigs', `${settingsId}`);
   await updateDoc(exchangeConfigsRef, {
     sellAveragePrice,
   });
-  return { id: configId };
+  return { id: settingsId };
 };
 
 export default updateSettingsService;

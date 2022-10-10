@@ -1,19 +1,28 @@
 import { Box, Button, Typography } from "@mui/material";
-import { CompanySettings, useCompanySettingsByFamily } from "hooks/settings-hooks";
+import { CompanySettingsFromApi, useCompanySettingsByFamily } from "hooks/settings-hooks";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
 import { getSerializedValuesFromSession } from "../../utils/session-utils";
 import SettingsModal from "./SettingsModal";
 
-const handleSelectedSetting = ({setOpenModal, setCompanySettingsSelected}: any, { value, companyId }: any) => {
-  setCompanySettingsSelected({ value, companyId });
+export type CompanySettings = {
+  value: number;
+  companyId: string;
+  settingsId: string;
+}
+
+const handleSelectedSetting = ({setOpenModal, setCompanySettingsSelected}: any,
+  { value, companyId, settingsId }: CompanySettings) => {
+  setCompanySettingsSelected({ value, companyId, settingsId });
   setOpenModal(true);
 };
 
 function SettingsPanel() {
   const session = useSession();
   const [openModal, setOpenModal] = useState(false);
-  const [companySettingsSelected, setCompanySettingsSelected] = useState({ value: 0, companyId: '' });
+  const [companySettingsSelected, setCompanySettingsSelected] = useState<CompanySettings>({
+    value: 0, companyId: '', settingsId: '',
+  });
   const { familyId } = getSerializedValuesFromSession(session.data);
   const companySettings = useCompanySettingsByFamily({ familyId });
   if (session.status !== 'authenticated' || !companySettings?.data) return (<Box>Carregando...</Box>);
@@ -26,7 +35,7 @@ function SettingsPanel() {
       />
       <Box>
         { companySettings?.data.exchangeConfigs.map(
-          (settings: CompanySettings) => (
+          (settings: CompanySettingsFromApi) => (
             <Box key={settings.companyId}>
               <Typography>{ settings.companyName } | { settings.sellAveragePrice }</Typography>
               <Button onClick={() => handleSelectedSetting({
@@ -35,6 +44,7 @@ function SettingsPanel() {
                 {
                   value: settings.sellAveragePrice,
                   companyId: settings.companyId,
+                  settingsId: settings.id,
                 })}
               >
                 X

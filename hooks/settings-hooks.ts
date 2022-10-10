@@ -5,7 +5,7 @@ type CompanySettingsByFamilyParams = {
   familyId: string;
 }
 
-export type CompanySettings = {
+export type CompanySettingsFromApi = {
   id: string;
   companyId: string;
   companyName: string;
@@ -15,7 +15,7 @@ export type CompanySettings = {
 
 type CompanySettingsSWR = {
   data?: {
-    exchangeConfigs: CompanySettings[];
+    exchangeConfigs: CompanySettingsFromApi[];
   };
   error?: any;
   isValidating: boolean;
@@ -28,7 +28,7 @@ export const useCompanySettingsByFamily = (params: CompanySettingsByFamilyParams
 };
 
 type UpdateCompanySettingsPayload = {
-  configId: string;
+  settingsId: string;
   sellAveragePrice: number;
 }
 
