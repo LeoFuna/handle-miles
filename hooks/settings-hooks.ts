@@ -1,3 +1,4 @@
+import { KeyedMutator } from "swr";
 import fetcher from "utils/fetcher";
 import useApi from "./use-api";
 
@@ -19,6 +20,7 @@ type CompanySettingsSWR = {
   };
   error?: any;
   isValidating: boolean;
+  mutate: KeyedMutator<any>;
 }
 
 export const useCompanySettingsByFamily = (params: CompanySettingsByFamilyParams): CompanySettingsSWR => {

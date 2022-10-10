@@ -3,21 +3,24 @@ import { Modal, Box, Typography, TextField, Button } from "@mui/material";
 import { useUpdateCompanySettings } from "hooks/settings-hooks";
 import { Dispatch, SetStateAction, useEffect } from "react";
 import { Controller, useForm, UseFormReset } from "react-hook-form";
+import { KeyedMutator } from "swr";
 import { CompanySettings } from "./SettingsPanel";
 
 const onSubmit = (
   form: { field: number },
   setOpen: Dispatch<SetStateAction<boolean>>,
   reset:  UseFormReset<{ field: number }>,
+  refreshData: KeyedMutator<any>,
   companySettings: CompanySettings
   ) => {
   const { settingsId } = companySettings;
   useUpdateCompanySettings({ sellAveragePrice: form.field, settingsId });
   reset({});
+  refreshData();
   setOpen(false);
 };
 
-function SettingsModal({ open, setOpen, companySettings }: any) {
+function SettingsModal({ open, setOpen, companySettings, refreshData }: any) {
   const { control, handleSubmit, reset, setValue } = useForm({
     defaultValues: {
       field: companySettings.value,
@@ -52,7 +55,7 @@ function SettingsModal({ open, setOpen, companySettings }: any) {
         </Box>
         <Button
           type='submit'
-          onClick={handleSubmit((form) => onSubmit(form, setOpen, reset, companySettings))}
+          onClick={handleSubmit((form) => onSubmit(form, setOpen, reset, refreshData, companySettings))}
         >
           Alterar
         </Button>

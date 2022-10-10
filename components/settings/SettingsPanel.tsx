@@ -32,6 +32,7 @@ function SettingsPanel() {
         open={openModal}
         setOpen={setOpenModal}
         companySettings={companySettingsSelected}
+        refreshData={companySettings.mutate}
       />
       <Box>
         { companySettings?.data.exchangeConfigs.map(
