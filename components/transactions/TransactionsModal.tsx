@@ -5,7 +5,7 @@ import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { useCompanies } from "hooks/companies-hooks";
 import { useCreateTransaction } from "hooks/transactions-hooks";
 import { Dispatch, SetStateAction } from "react";
-import { Controller, useForm } from "react-hook-form";
+import { Controller, useForm, UseFormReset } from "react-hook-form";
 
 type TransactionsModalTypes = {
   open: boolean;
@@ -29,16 +29,18 @@ const calcAveragePrice = (miles: number, total: number): number => {
 const onSubmit = async (
   formData: TransactionsFormTypes,
   setOpen: Dispatch<SetStateAction<boolean>>,
+  reset: UseFormReset<TransactionsFormTypes>,
   userId?: string): Promise<void> => {
   const averagePrice = calcAveragePrice(parseInt(formData.totalMiles), parseFloat(formData.totalMoney));
   const { totalMoney, totalMiles, ...rest } = formData;
   await useCreateTransaction({ ...rest, averagePrice, totalMiles: parseInt(totalMiles), userId });
+  reset({});
   setOpen(false);
 };
 
 function TransactionsModal({ open, userId, setOpen }: TransactionsModalTypes) {
   const companies = useCompanies();
-  const { control, setValue, handleSubmit, watch } = useForm<TransactionsFormTypes>({
+  const { control, setValue, handleSubmit, watch, reset } = useForm<TransactionsFormTypes>({
     defaultValues: {
       companyId: '',
       date: new Date(),
@@ -54,6 +56,7 @@ function TransactionsModal({ open, userId, setOpen }: TransactionsModalTypes) {
   return (
     <Modal
       open={open}
+      onClose={() => setOpen(false)}
       sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
     >
       <Box borderRadius={8} display='flex' alignItems='center' flexDirection='column' sx={{ backgroundColor: 'white', height: '70vh', width: '70vw' }}>
@@ -155,7 +158,12 @@ function TransactionsModal({ open, userId, setOpen }: TransactionsModalTypes) {
             />
           </Box>
         </Box>
-        <Button type='submit' onClick={handleSubmit((form: TransactionsFormTypes) => onSubmit(form, setOpen, userId))}>Criar</Button>
+        <Button
+          type='submit'
+          onClick={handleSubmit((form: TransactionsFormTypes) => onSubmit(form, setOpen, reset, userId))}
+        >
+          Criar
+        </Button>
       </Box>
     </Modal>
   );
