@@ -5,11 +5,14 @@ import { useSession } from 'next-auth/react';
 import Head from 'next/head';
 import { getSerializedValuesFromSession } from 'utils/session-utils';
 import styles from '../styles/Home.module.css';
+import Signout from './auth/signout';
 
 const Home: NextPage = () => {
   const session = useSession();
   const { familyId, userId, name } = getSerializedValuesFromSession(session.data);
-  if (session.status !== 'authenticated') return <h1>Usuário não autenticado!</h1>;
+
+  if (session.status === 'loading') return <h1>Carregando...</h1>;
+  if (session.status === 'unauthenticated') return <Signout />;
   return (
     <div className={styles.container}>
       <Head>

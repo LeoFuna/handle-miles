@@ -3,6 +3,7 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import { useState, MouseEvent } from "react";
 import { MenuBook } from "@mui/icons-material";
+import { signOut } from "next-auth/react";
 
 function Header({ title = 'Visão Geral' }) {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -44,8 +45,8 @@ function Header({ title = 'Visão Geral' }) {
               <Typography>Configurações</Typography>
             </MenuItem>
           </Menu>
-          <Tooltip title='Configurações'>
-            <IconButton sx={{ p: 0 }}>
+          <Tooltip title='Usuário'>
+            <IconButton onClick={() => signOut()} sx={{ p: 0 }}>
               <Avatar />
             </IconButton>
           </Tooltip>
