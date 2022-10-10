@@ -4,6 +4,7 @@ import { useSession } from "next-auth/react";
 import { useState } from "react";
 import { getSerializedValuesFromSession } from "../../utils/session-utils";
 import SettingsModal from "./SettingsModal";
+import { Edit } from '@mui/icons-material'
 
 export type CompanySettings = {
   value: number;
@@ -37,8 +38,8 @@ function SettingsPanel() {
       <Box>
         { companySettings?.data.exchangeConfigs.map(
           (settings: CompanySettingsFromApi) => (
-            <Box key={settings.companyId}>
-              <Typography>{ settings.companyName } | { settings.sellAveragePrice }</Typography>
+            <Box display='flex' alignItems='center' key={settings.companyId}>
+              <Typography>{ settings.companyName } | Milheiro: R$ { settings.sellAveragePrice }</Typography>
               <Button onClick={() => handleSelectedSetting({
                 setOpenModal,
                 setCompanySettingsSelected },
@@ -48,7 +49,7 @@ function SettingsPanel() {
                   settingsId: settings.id,
                 })}
               >
-                X
+                <Edit />
               </Button>
             </Box>
         )) 
