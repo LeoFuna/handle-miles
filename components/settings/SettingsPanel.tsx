@@ -4,7 +4,7 @@ import { useSession } from "next-auth/react";
 import { useState } from "react";
 import { getSerializedValuesFromSession } from "../../utils/session-utils";
 import SettingsModal from "./SettingsModal";
-import { Edit } from '@mui/icons-material'
+import { Edit } from "@mui/icons-material";
 
 export type CompanySettings = {
   value: number;

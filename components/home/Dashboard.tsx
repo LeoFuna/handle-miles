@@ -1,6 +1,7 @@
 import { Box, MenuItem, Select, Typography } from "@mui/material";
 import { DataGrid, GridColumns } from "@mui/x-data-grid";
 import { UserAccountsSWR, useUserAccounts } from "hooks/accounts-hooks";
+import { useCompanySettingsByFamily } from "hooks/settings-hooks";
 import { useUsersByFamily } from "hooks/users-hooks";
 import { useState } from "react";
 
@@ -17,40 +18,45 @@ const tableColumns: GridColumns = [
   { field: 'projectedInvoicing', headerName: 'Faturamento Previsto', flex: 1, headerAlign: 'center', align: 'center' },
 ];
 
-const serializeAccounts = (accounts: UserAccountsSWR) => accounts.data?.accounts.map((account) => {
+const serializeAccounts = (accounts: UserAccountsSWR, companiesSettings: any) => accounts.data?.accounts.map((account) => {
   const { averagePrice, ...rest } = account;
   const accountFormatedToRender = { ...rest, averagePrice: '', totalMoney: '', projectedInvoicing: '' };
   accountFormatedToRender.averagePrice = `R$ ${averagePrice}`;
   accountFormatedToRender.totalMoney = `R$ ${parseFloat((averagePrice * (account.totalMiles / 1000)).toFixed(2))}`;
-  conditionsEnum.IS_POINTS(account.company) ?
-    accountFormatedToRender.projectedInvoicing = `
-    R$ ${parseFloat((averageSellPrice.POINTS * (account.totalMiles / 1000)).toFixed(2))}
-    ` :
-    accountFormatedToRender.projectedInvoicing = `
-    R$ ${parseFloat((averageSellPrice.MILES * (account.totalMiles / 1000)).toFixed(2))}
-    `;
+
+  const sellAveragePrice = companiesSettings.data?.exchangeConfigs
+  .find((settings: any) => settings.companyId === account.companyId).sellAveragePrice;
+
+  accountFormatedToRender.projectedInvoicing = `
+    R$ ${parseFloat((sellAveragePrice * (account.totalMiles / 1000)).toFixed(2))}
+  `;
+
   return accountFormatedToRender;
 });
 
-const buildMainHeaderData = (accounts: UserAccountsSWR) => {
+const buildMainHeaderData = (accounts: UserAccountsSWR, companiesSettings: any) => {
   return accounts.data?.accounts.reduce((prev, current) => {
+    const sellAveragePrice = companiesSettings.data?.exchangeConfigs
+      .find((settings: any) => settings.companyId === current.companyId).sellAveragePrice;
     prev.totalInvested += current.averagePrice * (current.totalMiles / 1000);
+
     if (conditionsEnum.IS_POINTS(current.company)) {
       prev.totalPoints += current.totalMiles;
-      prev.projectedInvoice += (current.totalMiles / 1000) * averageSellPrice.POINTS;
-    } else {
-      prev.totalMiles += current.totalMiles;
-      prev.projectedInvoice += (current.totalMiles / 1000) * averageSellPrice.MILES;
+      prev.projectedInvoice += (current.totalMiles / 1000) * sellAveragePrice;
+      return prev;
     }
+    prev.totalMiles += current.totalMiles;
+    prev.projectedInvoice += (current.totalMiles / 1000) * sellAveragePrice;
     return prev;
   }, { totalInvested: 0, projectedInvoice: 0, totalMiles: 0, totalPoints: 0 });
 };
 
-function Dashboard({ userId, familyId, name }: { userId: string, familyId: string, name: string }) {
+function Dashboard({ familyId, name }: { userId: string, familyId: string, name: string }) {
   const [selectedAccount, setSelectedAccount] = useState(name);
 
   const familyUsers = useUsersByFamily({ familyId, name });
   const accounts = useUserAccounts({ userId: familyUsers.data?.users.find((user: any) => user.name === selectedAccount).id || '' });
+  const companiesSettings = useCompanySettingsByFamily({ familyId });
 
   return (
     <Box flexDirection='column' justifyContent='center' display='flex'>
@@ -60,7 +66,7 @@ function Dashboard({ userId, familyId, name }: { userId: string, familyId: strin
             Total Investido
           </Typography>
           <Typography variant='h5'>
-            {`R$ ${buildMainHeaderData(accounts)?.totalInvested.toFixed(2) || ''}`}
+            {`R$ ${buildMainHeaderData(accounts, companiesSettings)?.totalInvested.toFixed(2) || ''}`}
           </Typography>
         </Box>
         <Box display='flex' flexDirection='column' textAlign='center'>
@@ -68,7 +74,7 @@ function Dashboard({ userId, familyId, name }: { userId: string, familyId: strin
             Faturamento
           </Typography>
           <Typography variant='h5'>
-            {`R$ ${buildMainHeaderData(accounts)?.projectedInvoice.toFixed(2) || ''}`}
+            {`R$ ${buildMainHeaderData(accounts, companiesSettings)?.projectedInvoice.toFixed(2) || ''}`}
           </Typography>
         </Box>
         <Box display='flex' flexDirection='column' textAlign='center'>
@@ -76,7 +82,7 @@ function Dashboard({ userId, familyId, name }: { userId: string, familyId: strin
             Total de Milhas
           </Typography>
           <Typography variant='h5'>
-            {`${buildMainHeaderData(accounts)?.totalMiles }`}
+            {`${buildMainHeaderData(accounts, companiesSettings)?.totalMiles }`}
           </Typography>
         </Box>
         <Box display='flex' flexDirection='column' textAlign='center'>
@@ -84,7 +90,7 @@ function Dashboard({ userId, familyId, name }: { userId: string, familyId: strin
             Total de Pontos
           </Typography> 
           <Typography variant='h5'>
-            {`${buildMainHeaderData(accounts)?.totalPoints}`}
+            {`${buildMainHeaderData(accounts, companiesSettings)?.totalPoints}`}
           </Typography>
         </Box>
       </Box>
@@ -100,7 +106,7 @@ function Dashboard({ userId, familyId, name }: { userId: string, familyId: strin
       </Box>
       <DataGrid
         autoHeight
-        rows={serializeAccounts(accounts) || []}
+        rows={serializeAccounts(accounts, companiesSettings) || []}
         columns={tableColumns}
         rowsPerPageOptions={[8]}
       />
