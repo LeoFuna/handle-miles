@@ -32,7 +32,7 @@ app.get('/api/settings', async (req: express.Request, res: express.Response) => 
 });
 
 app.put('/api/settings', async (req: express.Request, res: express.Response) => {
-  const updateResponse = await updateSettingsService(req.body);
+  const updateResponse = await updateSettingsService(JSON.parse(req.body));
   res.json(updateResponse);
 });
 
