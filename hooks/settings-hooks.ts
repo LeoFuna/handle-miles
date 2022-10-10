@@ -1,3 +1,4 @@
+import fetcher from "utils/fetcher";
 import useApi from "./use-api";
 
 type CompanySettingsByFamilyParams = {
@@ -24,4 +25,17 @@ export const useCompanySettingsByFamily = (params: CompanySettingsByFamilyParams
   const url = new URLSearchParams(params);
   const settings = useApi(`/api/settings?${url}`);
   return settings;
+};
+
+type UpdateCompanySettingsPayload = {
+  configId: string;
+  sellAveragePrice: number;
+}
+
+export const useUpdateCompanySettings = (body: UpdateCompanySettingsPayload): Promise<{ id: string }> => {
+  const updateResponse = fetcher('/api/settings', {
+    method: 'PUT',
+    body: JSON.stringify(body),
+  });
+  return updateResponse;
 };
