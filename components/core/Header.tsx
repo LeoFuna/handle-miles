@@ -44,6 +44,15 @@ function Header({ title = 'Visão Geral' }) {
             <MenuItem onClick={() => router.push('/settings')}>
               <Typography>Configurações</Typography>
             </MenuItem>
+            <MenuItem onClick={() => router.push('/settings')}>
+              <Typography>Teste 1</Typography>
+            </MenuItem>
+            <MenuItem onClick={() => router.push('/settings')}>
+              <Typography>Teste 2</Typography>
+            </MenuItem>
+            <MenuItem onClick={() => router.push('/settings')}>
+              <Typography>Teste 3</Typography>
+            </MenuItem>
           </Menu>
           <Tooltip title='Usuário'>
             <IconButton onClick={() => signOut()} sx={{ p: 0 }}>
