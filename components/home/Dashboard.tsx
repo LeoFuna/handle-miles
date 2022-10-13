@@ -5,7 +5,6 @@ import { useCompanySettingsByFamily } from "hooks/settings-hooks";
 import { useUsersByFamily } from "hooks/users-hooks";
 import { useState } from "react";
 
-const averageSellPrice = { MILES: 20, POINTS: 40 };
 const conditionsEnum = {
   IS_POINTS: (companyName: string): boolean => ['Esfera', 'Livelo', 'PDA'].includes(companyName),
 };
@@ -61,32 +60,32 @@ function Dashboard({ familyId, name }: { userId: string, familyId: string, name:
   return (
     <Box flexDirection='column' justifyContent='center' display='flex'>
       <Box display='flex' justifyContent='space-evenly' m={5} >
-        <Box display='flex' flexDirection='column' textAlign='center'>
-          <Typography variant='h3'>
+        <Box display='flex' flexDirection='column' border={1} p={1.5} borderRadius={4} textAlign='center'>
+          <Typography variant='h4'>
             Total Investido
           </Typography>
           <Typography variant='h5'>
             {`R$ ${buildMainHeaderData(accounts, companiesSettings)?.totalInvested.toFixed(2) || ''}`}
           </Typography>
         </Box>
-        <Box display='flex' flexDirection='column' textAlign='center'>
-          <Typography variant='h3'>
+        <Box display='flex' flexDirection='column' border={1} p={1.5} borderRadius={4} textAlign='center'>
+          <Typography variant='h4'>
             Faturamento
           </Typography>
           <Typography variant='h5'>
             {`R$ ${buildMainHeaderData(accounts, companiesSettings)?.projectedInvoice.toFixed(2) || ''}`}
           </Typography>
         </Box>
-        <Box display='flex' flexDirection='column' textAlign='center'>
-          <Typography variant='h3'>
+        <Box display='flex' flexDirection='column' border={1} p={1.5} borderRadius={4} textAlign='center'>
+          <Typography variant='h4'>
             Total de Milhas
           </Typography>
           <Typography variant='h5'>
             {`${buildMainHeaderData(accounts, companiesSettings)?.totalMiles }`}
           </Typography>
         </Box>
-        <Box display='flex' flexDirection='column' textAlign='center'>
-          <Typography variant='h3'>
+        <Box display='flex' flexDirection='column' border={1} p={1.5} borderRadius={4} textAlign='center'>
+          <Typography variant='h4'>
             Total de Pontos
           </Typography> 
           <Typography variant='h5'>
