@@ -11,10 +11,11 @@ type ReqQuery = {
   name: string;
 }
 
-app.get('/api/users', async (req: express.Request<Params, ResBody, ReqBody, ReqQuery>, res: express.Response) => {
-  const { familyId, name } = req.query;
-  const users = await listUsersByFamily({ familyId, name });
-  res.json({ users });
+app.route('/api/users')
+  .get(async (req: express.Request<Params, ResBody, ReqBody, ReqQuery>, res: express.Response) => {
+    const { familyId, name } = req.query;
+    const users = await listUsersByFamily({ familyId, name });
+    res.json({ users });
 });
 
 export default app;
