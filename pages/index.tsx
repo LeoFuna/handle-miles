@@ -19,7 +19,7 @@ const Home: NextPage = () => {
         <title>Gestor de Milhas</title>
         <link rel='icon' href='/favicon.ico' />
       </Head>
-      <Header />
+      <Header name={name} />
       <Dashboard
         userId={ userId }
         familyId={ familyId }

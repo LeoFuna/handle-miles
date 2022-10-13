@@ -18,15 +18,13 @@ const handleSelectedSetting = ({setOpenModal, setCompanySettingsSelected}: any,
   setOpenModal(true);
 };
 
-function SettingsPanel() {
-  const session = useSession();
+function SettingsPanel({ familyId }: { familyId: string }) {
   const [openModal, setOpenModal] = useState(false);
   const [companySettingsSelected, setCompanySettingsSelected] = useState<CompanySettings>({
     value: 0, companyId: '', settingsId: '',
   });
-  const { familyId } = getSerializedValuesFromSession(session.data);
   const companySettings = useCompanySettingsByFamily({ familyId });
-  if (session.status !== 'authenticated' || !companySettings?.data) return (<Box>Carregando...</Box>);
+  if (!companySettings?.data) return (<Box>Carregando...</Box>);
   return (
     <>
       <SettingsModal

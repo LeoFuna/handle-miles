@@ -39,7 +39,7 @@ function Transactions() {
   if (session.status !== 'authenticated') return <h1>Usuário não autenticado</h1>;
   return(
     <>
-      <Header />
+      <Header title='Movimentações' name={name} />
       <Button 
         variant='outlined' 
         sx={{ m: 2 }}
