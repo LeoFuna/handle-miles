@@ -1,34 +1,76 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Handle Miles
 
-## Getting Started
+> Projeto de Gestor de Milhas
 
-First, run the development server:
+Esse projeto tem o objetivo de gerar um sistema que auxilie o usuário a gerenciar sua milhas aéreas e pontos nas principais companhias aéreas brasileiras e programa de pontos.
+
+
+* [Ambientes](#ambientes)
+* [Começando](#começando)
+* [Estrutura do projeto](#estrutura-do-projeto)
+* [Staging](#staging)
+* [Produção](#produção)
+
+## Ambientes
+| Ambiente | URL |
+| - | - |
+| Produção | https://handle-miles.vercel.app/ |
+| Desenvolvimento | https://handle-miles-staging.vercel.app/ |
+
+## Começando
+
+Instalando as dependências
+
+```bash
+npm install
+```
+
+Copie o arquivo `.env.sample` e chame-o de  `.env.local` e altere os valores das credenciais para os seus valores locais
+
+Inicie o projeto
 
 ```bash
 npm run dev
-# or
-yarn dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Acesse [localhost:3000](localhost:3000)
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+## Estrutura do projeto
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+```bash
+components/         # Componentes
+  auth/             # Componentes de autenticação
+  core/             # Componentes compartilhados
+  home/             # Componentes da página principal
+  settings/         # Componentes de configurações
+  transactions/     # Componentes das transações
+db/
+  firebase.js       # Conexão com o Firebase e seus serviços
+hooks/              # Hooks da aplicação
+pages/              # Rotas das páginas React e api
+  api/              # Rotas de api
+  auth/
+  settings/
+  transactions/
+  index.tsx         # Entrypoint da aplicação
+services/           # Serviços usados pelas rotas de api
+styles/             # Estilização da aplicação
+utils/              # Funções úteis para a aplicação
+```
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+## Staging
 
-## Learn More
+A aplicação é atualizada quando existe um push na branch `staging`. Para disponibilizar o código que gostaria de testar na aplicação de staging, basta realizar um push pra branch `staging`.
 
-To learn more about Next.js, take a look at the following resources:
+Exemplo:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```sh
+git checkout <sua-branch>
+git push origin <sua-branch>:staging -f
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+_Essa branch é utilizada como gatilho para o ambiente de `staging` e não precisa se manter atualizada, é utilizada para receber códigos que queremos enviar para `staging`._
 
-## Deploy on Vercel
+## Produção
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+O código será disponibilizado automaticamente em produção quando um commit for enviado para a branch `main`.
