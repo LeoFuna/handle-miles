@@ -161,6 +161,9 @@ function TransactionsModal({ open, userId, setOpen }: TransactionsModalTypes) {
         </Box>
         <Button
           type='submit'
+          variant='contained'
+          sx={{ mt: '15px' }}
+          size='large'
           onClick={handleSubmit((form: TransactionsFormTypes) => onSubmit(form, setOpen, reset, userId))}
         >
           Criar
