@@ -1,4 +1,5 @@
 import { Button, MenuItem, Modal, Select } from "@mui/material";
+import { Box } from "@mui/system";
 import { DataGrid, GridColumns } from "@mui/x-data-grid";
 import Header from "components/core/Header";
 import TransactionsModal from "components/transactions/TransactionsModal";
@@ -40,21 +41,24 @@ function Transactions() {
   return(
     <>
       <Header title='Movimentações' name={name} />
-      <Button 
-        variant='outlined' 
-        sx={{ m: 2 }}
-        onClick={ () => setOpenModal(true)}
-      >
-        Criar
-      </Button>
-      <Select
-        value={selectedAccount}
-        onChange={(event) => setSelectedAccount(event.target.value)}
-      >
-        {familyUsers.data?.users.map(
-          (user: any) => <MenuItem key={user.id} value={user.name}>{user.name}</MenuItem>)
-        }
-      </Select>
+      <Box width='100vw' display='flex' sx={{ justifyContent: 'space-between' }}>
+        <Select
+          value={selectedAccount}
+          onChange={(event) => setSelectedAccount(event.target.value)}
+          sx={{ m: 2, ml: 4 }}
+        >
+          {familyUsers.data?.users.map(
+            (user: any) => <MenuItem key={user.id} value={user.name}>{user.name}</MenuItem>)
+          }
+        </Select>
+        <Button 
+          variant='contained' 
+          sx={{ m: 2, mr: 4, width: '120px', fontWeight: 'bolder', backgroundColor: 'gray' }}
+          onClick={ () => setOpenModal(true)}
+        >
+          Criar
+        </Button>
+      </Box>
       <TransactionsModal
         open={openModal}
         userId={familyUsers.data?.users.find((user: any) => user.name === selectedAccount)?.id || ''}
