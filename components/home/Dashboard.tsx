@@ -93,7 +93,7 @@ function Dashboard({ familyId, name }: { userId: string, familyId: string, name:
           </Typography>
         </Box>
       </Box>
-      <Box>
+      <Box m={2}>
         <Select
           value={selectedAccount}
           onChange={(event) => setSelectedAccount(event.target.value)}
@@ -108,7 +108,7 @@ function Dashboard({ familyId, name }: { userId: string, familyId: string, name:
         rows={serializeAccounts(accounts, companiesSettings) || []}
         columns={tableColumns}
         rowsPerPageOptions={[8]}
-        style={{ fontSize: '1.7em' }}
+        style={{ fontSize: '1.6em' }}
       />
     </Box>
   );
