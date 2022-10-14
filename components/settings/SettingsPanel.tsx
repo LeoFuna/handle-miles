@@ -33,10 +33,10 @@ function SettingsPanel({ familyId }: { familyId: string }) {
         companySettings={companySettingsSelected}
         refreshData={companySettings.mutate}
       />
-      <Box>
+      <Box display='flex' height='80vh' justifyContent='center' alignItems='center' flexDirection='column'>
         { companySettings?.data.exchangeConfigs.map(
           (settings: CompanySettingsFromApi) => (
-            <Box display='flex' alignItems='center' key={settings.companyId}>
+            <Box display='flex' mb={3} alignItems='center' key={settings.companyId}>
               <Typography>{ settings.companyName } | Milheiro: R$ { settings.sellAveragePrice }</Typography>
               <Button onClick={() => handleSelectedSetting({
                 setOpenModal,

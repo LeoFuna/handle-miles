@@ -55,6 +55,9 @@ function SettingsModal({ open, setOpen, companySettings, refreshData }: any) {
         </Box>
         <Button
           type='submit'
+          variant='contained'
+          sx={{ mt: '18px' }}
+          size='large'
           onClick={handleSubmit((form) => onSubmit(form, setOpen, reset, refreshData, companySettings))}
         >
           Alterar
