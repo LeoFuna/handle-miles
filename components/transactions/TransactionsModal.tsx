@@ -2,6 +2,7 @@
 import { Modal, Box, Typography, TextField, Autocomplete, Select, MenuItem, Button, InputAdornment } from "@mui/material";
 import { LocalizationProvider, DesktopDatePicker } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import ptBR from "date-fns/locale/pt-BR";
 import { useCompanies } from "hooks/companies-hooks";
 import { useCreateTransaction } from "hooks/transactions-hooks";
 import { Dispatch, SetStateAction } from "react";
@@ -60,7 +61,7 @@ function TransactionsModal({ open, userId, setOpen }: TransactionsModalTypes) {
       sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
     >
       <Box borderRadius={8} display='flex' alignItems='center' flexDirection='column' sx={{ backgroundColor: 'white', height: '70vh', width: '70vw' }}>
-        <Typography textAlign='center' variant='h4'>Criação de Transação</Typography>
+        <Typography display='flex' alignItems='center' height={100} variant='h4'>Criação de Transação</Typography>
         <Box display='flex' alignItems='center' width='90%'>
           <Box width='25%'>
             <Typography textAlign='center'>Companhia: </Typography>
@@ -134,7 +135,7 @@ function TransactionsModal({ open, userId, setOpen }: TransactionsModalTypes) {
             <Typography textAlign='center'>Dia da Transação: </Typography>
           </Box>
           <Box width='75%' m={1} >
-            <LocalizationProvider dateAdapter={AdapterDateFns} >
+            <LocalizationProvider adapterLocale={ptBR} dateAdapter={AdapterDateFns} >
               <DesktopDatePicker
                 inputFormat='dd/MM/yyyy'
                 value={date || null}
