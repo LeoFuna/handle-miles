@@ -56,6 +56,7 @@ pages/              # Rotas das páginas React e api
 services/           # Serviços usados pelas rotas de api
 styles/             # Estilização da aplicação
 utils/              # Funções úteis para a aplicação
+__tests__/          # Testes unitários
 ```
 
 ## Staging
