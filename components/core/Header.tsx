@@ -18,7 +18,7 @@ function Header({ title = 'Visão Geral', name }: { title?: string; name: string
   const openUserMenu = Boolean(userAnchorEl);
 
   return (
-    <AppBar position='static'>
+    <AppBar data-testid='app-header' position='static'>
       <Box sx={{ height: '70px', display: 'flex', alignItems: 'center' }} >
         <Box width='30vw' m={5} sx={{ display: 'flex', justifyContent: 'start' }}>
           <Image width={50} height={50} alt='logo' src='/airplane-logo.png' />
