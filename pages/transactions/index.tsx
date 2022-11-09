@@ -7,10 +7,13 @@ import { Transaction, useTransactions } from "hooks/transactions-hooks";
 import { useUsersByFamily } from "hooks/users-hooks";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
+import { formatDate } from "utils/date-utils";
 import { getSerializedValuesFromSession } from "utils/session-utils";
 
+const dateFormatter = ({ value }: { value: string }) => formatDate(value, 'dd/MM/yy');
+
 const tableColumns: GridColumns = [
-  { field: 'date', headerName: 'Data', flex: 1, headerAlign: 'center', align: 'center' },
+  { field: 'date', headerName: 'Data', flex: 1, headerAlign: 'center', align: 'center', valueFormatter: dateFormatter },
   { field: 'company', headerName: 'Programa', flex: 1, headerAlign: 'center', align: 'center' },
   { field: 'totalMiles', headerName: 'Total', flex: 1, headerAlign: 'center', align: 'center' },
   { field: 'averagePrice', headerName: 'Preço Médio', flex: 1, headerAlign: 'center', align: 'center' },
@@ -59,17 +62,17 @@ function Transactions() {
           Criar
         </Button>
       </Box>
-      <TransactionsModal
-        open={openModal}
-        userId={familyUsers.data?.users.find((user: any) => user.name === selectedAccount)?.id || ''}
-        setOpen={setOpenModal}
-      />
       <DataGrid
         autoHeight
         rows={serializeTransactions(transactions.data?.transactions || [])}
         columns={tableColumns}
         rowsPerPageOptions={[8]}
         pageSize={10}
+      />
+      <TransactionsModal
+        open={openModal}
+        userId={familyUsers.data?.users.find((user: any) => user.name === selectedAccount)?.id || ''}
+        setOpen={setOpenModal}
       />
     </>
   );
