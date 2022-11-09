@@ -5,7 +5,6 @@ import { createRouter } from "next-connect";
 import { collection, getDocs, query, where } from 'firebase/firestore';
 import listCompaniesService from "services/companies/list-companies.services";
 import createTransactionService from "services/transactions/create-transaction.services";
-import { formatDate } from "utils/date-utils";
 
 const router = createRouter<NextApiRequest, NextApiResponse>();
 
@@ -18,12 +17,17 @@ const transactions = router
     const transactions = querySnapshot.docs.map((doc) => {
       const transaction = doc.data();
       transaction.company = companies.find((company) => company.id === transaction.companyId)?.name;
-      transaction.date = formatDate(transaction.date, 'dd/MM/yyyy');
       transaction.id = doc.id;
       return transaction;
     });
 
-    return res.json({ transactions });
+    const orderedByDateTransactions = transactions.sort((prevTran, currentTran) => {
+      if (prevTran.date > currentTran.date) return -1;
+      if (prevTran.date < currentTran.date) return 1;
+      return 0;
+    });
+
+    return res.json({ transactions: orderedByDateTransactions });
 })
   .post(async (req, res) => {
     const createResponse = await createTransactionService(JSON.parse(req.body));
