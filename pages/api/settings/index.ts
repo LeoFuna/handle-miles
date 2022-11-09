@@ -1,11 +1,9 @@
 import { db } from "db/firebase";
-import express from "express";
+import router, { onError, onNoMatch } from "utils/router";
 import { collection, DocumentData, getDocs, query, where } from "firebase/firestore";
 import listCompaniesService from "services/companies/list-companies.services";
 import createSettingService from "services/settings/create-setting.service";
 import updateSettingsService from "services/settings/update-settings.services";
-
-const app = express();
 
 type ExchangeConfigResponse = {
   id: string;
@@ -15,8 +13,8 @@ type ExchangeConfigResponse = {
   sellAveragePrice: number;
 }
 
-app.route('/api/settings')
-  .get(async (req: express.Request, res: express.Response) => {
+const settings = router
+  .get(async (req, res) => {
     const { familyId } = req.query;
     const companies = await listCompaniesService();
     const exchangeConfigsRef = collection(db, 'exchangeConfigs');
@@ -32,14 +30,17 @@ app.route('/api/settings')
 
     res.json({ exchangeConfigs });
 })
-  .put(async (req: express.Request, res: express.Response) => {
+  .put(async (req, res) => {
     const updateResponse = await updateSettingsService(JSON.parse(req.body));
     res.json(updateResponse);
 })
-  .post(async (req: express.Request, res: express.Response) => {
+  .post(async (req, res) => {
     const createResponse = await createSettingService(req.body);
     res.json(createResponse);
 });
 
-export default app;
+export default settings.handler({
+  onError,
+  onNoMatch,
+});
 

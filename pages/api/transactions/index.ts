@@ -1,14 +1,12 @@
 import { db } from "db/firebase";
-import express from "express";
+import router, { onError, onNoMatch } from "utils/router";
 import { collection, getDocs, query, where } from 'firebase/firestore';
 import listCompaniesService from "services/companies/list-companies.services";
 import createTransactionService from "services/transactions/create-transaction.services";
 import { formatDate } from "utils/date-utils";
 
-const app = express();
-
-app.route('/api/transactions')
-  .get(async (req: express.Request, res: express.Response) => {
+const transactions = router
+  .get(async (req, res) => {
     const companies = await listCompaniesService();
     const transactionsRef = collection(db, 'transactions');
     const myQuery = query(transactionsRef, where('userId', '==', `${req.query.userId}`));
@@ -23,10 +21,13 @@ app.route('/api/transactions')
 
     return res.json({ transactions });
 })
-  .post(async (req: express.Request, res: express.Response) => {
+  .post(async (req, res) => {
     const createResponse = await createTransactionService(JSON.parse(req.body));
     return res.json(createResponse);
 });
 
-export default app;
+export default transactions.handler({
+  onError,
+  onNoMatch,
+});
 

@@ -1,12 +1,13 @@
-import express from "express";
+import router, { onError, onNoMatch } from "utils/router";
 import listCompaniesService from "services/companies/list-companies.services";
 
-const app = express();
-
-app.route('/api/companies')
-  .get(async (_req: express.Request, res: express.Response) => {
+const companies = router
+  .get(async (_req, res) => {
   const companies = await listCompaniesService();
   res.json({ companies });
 });
 
-export default app;
+export default companies.handler({
+  onError,
+  onNoMatch,
+});

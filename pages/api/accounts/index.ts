@@ -1,11 +1,9 @@
-import express from "express";
+import router, { onError, onNoMatch } from "utils/router";
 import createAccountService from "services/accounts/create-account.services";
 import getUserAccountsService from "services/accounts/get-user-accounts.services";
 
-const app = express();
-
-app.route('/api/accounts')
-  .get(async (req: express.Request, res: express.Response) => {
+const accounts = router
+  .get(async (req, res) => {
     const accounts = await getUserAccountsService(req.query.userId);
     res.json({ accounts });
 })
@@ -14,4 +12,7 @@ app.route('/api/accounts')
     res.json(createResponse);
 });
 
-export default app;
+export default accounts.handler({
+  onError,
+  onNoMatch,
+});
