@@ -1,9 +1,13 @@
 import { db } from "db/firebase";
-import router, { onError, onNoMatch } from "utils/router";
+import { onError, onNoMatch } from "utils/exceptions";
+import type { NextApiRequest, NextApiResponse } from "next";
+import { createRouter } from "next-connect";
 import { collection, getDocs, query, where } from 'firebase/firestore';
 import listCompaniesService from "services/companies/list-companies.services";
 import createTransactionService from "services/transactions/create-transaction.services";
 import { formatDate } from "utils/date-utils";
+
+const router = createRouter<NextApiRequest, NextApiResponse>();
 
 const transactions = router
   .get(async (req, res) => {

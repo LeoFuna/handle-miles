@@ -1,5 +1,7 @@
 import { db } from "db/firebase";
-import router, { onError, onNoMatch } from "utils/router";
+import { onError, onNoMatch } from "utils/exceptions";
+import { createRouter } from "next-connect";
+import type { NextApiRequest, NextApiResponse } from "next";
 import { collection, DocumentData, getDocs, query, where } from "firebase/firestore";
 import listCompaniesService from "services/companies/list-companies.services";
 import createSettingService from "services/settings/create-setting.service";
@@ -12,6 +14,8 @@ type ExchangeConfigResponse = {
   familyId: string;
   sellAveragePrice: number;
 }
+
+const router = createRouter<NextApiRequest, NextApiResponse>();
 
 const settings = router
   .get(async (req, res) => {

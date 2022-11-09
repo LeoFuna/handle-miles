@@ -12,7 +12,3 @@ export const onError = (err: unknown, req: NextApiRequest, res: NextApiResponse)
 export const onNoMatch = (req: NextApiRequest, res: NextApiResponse) => {
   res.status(404).end("Page is not found");
 };
-
-const router = createRouter<NextApiRequest, NextApiResponse>();
-
-export default router;

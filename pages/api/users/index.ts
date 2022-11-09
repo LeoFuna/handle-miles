@@ -1,5 +1,9 @@
-import router, { onError, onNoMatch } from "utils/router";
+import { createRouter } from "next-connect";
+import { onError, onNoMatch } from "utils/exceptions";
+import type { NextApiRequest, NextApiResponse } from "next";
 import listUsersByFamily from "services/users/get-users-by-family.services";
+
+const router = createRouter<NextApiRequest, NextApiResponse>();
 
 const users = router
   .get(async (req, res) => {

@@ -1,5 +1,9 @@
-import router, { onError, onNoMatch } from "utils/router";
+import { createRouter } from "next-connect";
+import { onError, onNoMatch } from "utils/exceptions";
+import type { NextApiRequest, NextApiResponse } from "next";
 import listCompaniesService from "services/companies/list-companies.services";
+
+const router = createRouter<NextApiRequest, NextApiResponse>();
 
 const companies = router
   .get(async (_req, res) => {
