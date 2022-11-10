@@ -6,7 +6,7 @@ import TransactionsModal from "components/transactions/TransactionsModal";
 import { Transaction, useTransactions } from "hooks/transactions-hooks";
 import { useUsersByFamily } from "hooks/users-hooks";
 import { useSession } from "next-auth/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { formatDate } from "utils/date-utils";
 import { getSerializedValuesFromSession } from "utils/session-utils";
 
@@ -34,11 +34,16 @@ const serializeTransactions = (transactionsFromApi: Transaction[]) => {
 function Transactions() {
   const session = useSession();
   const { userId, familyId, name } = getSerializedValuesFromSession(session.data);
-  const [selectedAccount, setSelectedAccount] = useState(name);
+  const [selectedAccount, setSelectedAccount] = useState('');
   const [openModal, setOpenModal] = useState(false);
-
   const familyUsers = useUsersByFamily({ familyId, name });
   const transactions = useTransactions({ userId: familyUsers.data?.users.find((user: any) => user.name === selectedAccount)?.id || userId });
+
+  useEffect(() => {
+    if(session.status === 'authenticated') {
+      setSelectedAccount(name);
+    }
+  }, [session.status]);
 
   if (session.status !== 'authenticated') return <h1>Usuário não autenticado</h1>;
   return(
@@ -46,14 +51,14 @@ function Transactions() {
       <Header title='Movimentações' name={name} />
       <Box width='100vw' display='flex' sx={{ justifyContent: 'space-between' }}>
         <Select
-          value={selectedAccount}
+          value={!!familyUsers.data ? selectedAccount : ''}
           onChange={(event) => setSelectedAccount(event.target.value)}
           sx={{ m: 2, ml: 4 }}
         >
           {familyUsers.data?.users.map(
             (user: any) => <MenuItem key={user.id} value={user.name}>{user.name}</MenuItem>)
           }
-        </Select>
+        </Select> 
         <Button 
           variant='contained' 
           sx={{ m: 2, mr: 4, width: '120px', fontWeight: 'bolder', backgroundColor: 'gray' }}
@@ -66,7 +71,7 @@ function Transactions() {
         autoHeight
         rows={serializeTransactions(transactions.data?.transactions || [])}
         columns={tableColumns}
-        rowsPerPageOptions={[8]}
+        rowsPerPageOptions={[10]}
         pageSize={10}
       />
       <TransactionsModal

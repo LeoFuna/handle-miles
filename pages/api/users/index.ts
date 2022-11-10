@@ -8,10 +8,10 @@ const router = createRouter<NextApiRequest, NextApiResponse>();
 const users = router
   .get(async (req, res) => {
     const { familyId, name } = req.query;
-    if (!familyId || !name) throw new Error('Campos obrigatorios faltando!');
-    if (Array.isArray(familyId) || Array.isArray(name)) throw new Error('Campos obrigatorios com dados invalidos!');
+    if (typeof familyId !== 'string' || typeof name !== 'string') throw new Error('Dados inválidos!');
 
     const users = await listUsersByFamily({ familyId, name });
+
     res.json({ users });
   });
 
