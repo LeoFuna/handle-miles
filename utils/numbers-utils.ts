@@ -6,4 +6,4 @@ export const formatPriceToPtBRCurrency = ({ value }: { value: number }) => {
   return formatter.format(value).toString();
 };
 
-export const separeteNumberWithDots = ({value}: { value: number }) => value.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
+export const separateNumberWithDots = ({value}: { value: number }) => value.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
