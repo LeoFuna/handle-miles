@@ -4,6 +4,7 @@ import { UserAccountsSWR, useUserAccounts } from "hooks/accounts-hooks";
 import { useCompanySettingsByFamily } from "hooks/settings-hooks";
 import { useUsersByFamily } from "hooks/users-hooks";
 import { useState } from "react";
+import { formatPriceToPtBRCurrency, separeteNumberWithDots } from "utils/numbers-utils";
 
 const conditionsEnum = {
   IS_POINTS: (companyName: string): boolean => ['Esfera', 'Livelo', 'PDA'].includes(companyName),
@@ -11,24 +12,22 @@ const conditionsEnum = {
 
 const tableColumns: GridColumns = [
   { field: 'company', headerName: '', flex: 1, align: 'center' },
-  { field: 'totalMiles', headerName: 'Total de Pontos', flex: 1, headerAlign: 'center', align: 'center' },
-  { field: 'averagePrice', headerName: 'Preço Médio', flex: 1, headerAlign: 'center', align: 'center' },
-  { field: 'totalMoney', headerName: 'Total Investido', flex: 1, headerAlign: 'center', align: 'center' },
-  { field: 'projectedInvoicing', headerName: 'Faturamento Previsto', flex: 1, headerAlign: 'center', align: 'center' },
+  { field: 'totalMiles', headerName: 'Total de Pontos', flex: 1, headerAlign: 'center', align: 'center', valueFormatter: separeteNumberWithDots },
+  { field: 'averagePrice', headerName: 'Preço Médio', flex: 1, headerAlign: 'center', align: 'center', valueFormatter: formatPriceToPtBRCurrency },
+  { field: 'totalMoney', headerName: 'Total Investido', flex: 1, headerAlign: 'center', align: 'center', valueFormatter: formatPriceToPtBRCurrency },
+  { field: 'projectedInvoicing', headerName: 'Faturamento Previsto', flex: 1, headerAlign: 'center', align: 'center', valueFormatter: formatPriceToPtBRCurrency },
 ];
 
 const serializeAccounts = (accounts: UserAccountsSWR, companiesSettings: any) => accounts.data?.accounts.map((account) => {
   const { averagePrice, ...rest } = account;
   const accountFormatedToRender = { ...rest, averagePrice: '', totalMoney: '', projectedInvoicing: '' };
-  accountFormatedToRender.averagePrice = `R$ ${averagePrice.toFixed(2)}`;
-  accountFormatedToRender.totalMoney = `R$ ${(averagePrice * (account.totalMiles / 1000)).toFixed(2)}`;
+  accountFormatedToRender.averagePrice = averagePrice.toFixed(2);
+  accountFormatedToRender.totalMoney = (averagePrice * (account.totalMiles / 1000)).toFixed(2);
 
   const sellAveragePrice = companiesSettings.data?.exchangeConfigs
   .find((settings: any) => settings.companyId === account.companyId).sellAveragePrice;
 
-  accountFormatedToRender.projectedInvoicing = `
-    R$ ${(sellAveragePrice * (account.totalMiles / 1000)).toFixed(2)}
-  `;
+  accountFormatedToRender.projectedInvoicing = (sellAveragePrice * (account.totalMiles / 1000)).toFixed(2);
 
   return accountFormatedToRender;
 });
