@@ -4,7 +4,7 @@ type UserAccountsParamsType = {
   userId?: string;
 }
 
-type Account = {
+export type Account = {
   averagePrice: number;
   companyId: string;
   totalMiles: number;

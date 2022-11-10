@@ -1,10 +1,10 @@
 import { Box, MenuItem, Select, Typography } from "@mui/material";
 import { DataGrid, GridColumns } from "@mui/x-data-grid";
-import { UserAccountsSWR, useUserAccounts } from "hooks/accounts-hooks";
+import { Account, UserAccountsSWR, useUserAccounts } from "hooks/accounts-hooks";
 import { useCompanySettingsByFamily } from "hooks/settings-hooks";
 import { useUsersByFamily } from "hooks/users-hooks";
 import { useState } from "react";
-import { formatPriceToPtBRCurrency, separeteNumberWithDots } from "utils/numbers-utils";
+import { formatPriceToPtBRCurrency, separateNumberWithDots } from "utils/numbers-utils";
 
 const conditionsEnum = {
   IS_POINTS: (companyName: string): boolean => ['Esfera', 'Livelo', 'PDA'].includes(companyName),
@@ -12,7 +12,7 @@ const conditionsEnum = {
 
 const tableColumns: GridColumns = [
   { field: 'company', headerName: '', flex: 1, align: 'center' },
-  { field: 'totalMiles', headerName: 'Total de Pontos', flex: 1, headerAlign: 'center', align: 'center', valueFormatter: separeteNumberWithDots },
+  { field: 'totalMiles', headerName: 'Total de Pontos', flex: 1, headerAlign: 'center', align: 'center', valueFormatter: separateNumberWithDots },
   { field: 'averagePrice', headerName: 'Preço Médio', flex: 1, headerAlign: 'center', align: 'center', valueFormatter: formatPriceToPtBRCurrency },
   { field: 'totalMoney', headerName: 'Total Investido', flex: 1, headerAlign: 'center', align: 'center', valueFormatter: formatPriceToPtBRCurrency },
   { field: 'projectedInvoicing', headerName: 'Faturamento Previsto', flex: 1, headerAlign: 'center', align: 'center', valueFormatter: formatPriceToPtBRCurrency },
@@ -32,8 +32,8 @@ const serializeAccounts = (accounts: UserAccountsSWR, companiesSettings: any) =>
   return accountFormatedToRender;
 });
 
-const buildMainHeaderData = (accounts: UserAccountsSWR, companiesSettings: any) => {
-  return accounts.data?.accounts.reduce((prev, current) => {
+const buildMainHeaderData = (accounts: Account[], companiesSettings: any) => {
+  return accounts.reduce((prev, current) => {
     const sellAveragePrice = companiesSettings.data?.exchangeConfigs
       .find((settings: any) => settings.companyId === current.companyId).sellAveragePrice;
     prev.totalInvested += current.averagePrice * (current.totalMiles / 1000);
@@ -64,7 +64,7 @@ function Dashboard({ familyId, name }: { userId: string, familyId: string, name:
             Total Investido
           </Typography>
           <Typography variant='h5'>
-            {`R$ ${buildMainHeaderData(accounts, companiesSettings)?.totalInvested.toFixed(2) || ''}`}
+          {!!accounts.data?.accounts ? formatPriceToPtBRCurrency({ value: buildMainHeaderData(accounts.data.accounts, companiesSettings).totalInvested }) : ''}
           </Typography>
         </Box>
         <Box display='flex' flexDirection='column' border={1} p={1.5} borderRadius={4} textAlign='center'>
@@ -72,7 +72,7 @@ function Dashboard({ familyId, name }: { userId: string, familyId: string, name:
             Faturamento
           </Typography>
           <Typography variant='h5'>
-            {`R$ ${buildMainHeaderData(accounts, companiesSettings)?.projectedInvoice.toFixed(2) || ''}`}
+            {!!accounts.data?.accounts ? formatPriceToPtBRCurrency({ value: buildMainHeaderData(accounts.data.accounts, companiesSettings).projectedInvoice }) : ''}
           </Typography>
         </Box>
         <Box display='flex' flexDirection='column' border={1} p={1.5} borderRadius={4} textAlign='center'>
@@ -80,7 +80,7 @@ function Dashboard({ familyId, name }: { userId: string, familyId: string, name:
             Total de Milhas
           </Typography>
           <Typography variant='h5'>
-            {`${buildMainHeaderData(accounts, companiesSettings)?.totalMiles }`}
+            {!!accounts.data?.accounts ? `${separateNumberWithDots({ value: buildMainHeaderData(accounts.data.accounts, companiesSettings).totalMiles })}` : ''}
           </Typography>
         </Box>
         <Box display='flex' flexDirection='column' border={1} p={1.5} borderRadius={4} textAlign='center'>
@@ -88,7 +88,7 @@ function Dashboard({ familyId, name }: { userId: string, familyId: string, name:
             Total de Pontos
           </Typography> 
           <Typography variant='h5'>
-            {`${buildMainHeaderData(accounts, companiesSettings)?.totalPoints}`}
+          {!!accounts.data?.accounts ? `${separateNumberWithDots({ value: buildMainHeaderData(accounts.data.accounts, companiesSettings).totalPoints })}` : ''}
           </Typography>
         </Box>
       </Box>
