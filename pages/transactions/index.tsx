@@ -8,7 +8,7 @@ import { useUsersByFamily } from "hooks/users-hooks";
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { formatDate } from "utils/date-utils";
-import { formatPriceToPtBRCurrency, separeteNumberWithDots } from "utils/numbers-utils";
+import { formatPriceToPtBRCurrency, separateNumberWithDots } from "utils/numbers-utils";
 import { getSerializedValuesFromSession } from "utils/session-utils";
 
 const dateFormatter = ({ value }: { value: string }) => formatDate(value, 'dd/MM/yy');
@@ -16,7 +16,7 @@ const dateFormatter = ({ value }: { value: string }) => formatDate(value, 'dd/MM
 const tableColumns: GridColumns = [
   { field: 'date', headerName: 'Data', flex: 1, headerAlign: 'center', align: 'center', valueFormatter: dateFormatter },
   { field: 'company', headerName: 'Programa', flex: 1, headerAlign: 'center', align: 'center' },
-  { field: 'totalMiles', headerName: 'Total', flex: 1, headerAlign: 'center', align: 'center', valueFormatter: separeteNumberWithDots},
+  { field: 'totalMiles', headerName: 'Total', flex: 1, headerAlign: 'center', align: 'center', valueFormatter: separateNumberWithDots},
   { field: 'averagePrice', headerName: 'Preço Médio', flex: 1, headerAlign: 'center', align: 'center', valueFormatter: formatPriceToPtBRCurrency},
   { field: 'note', headerName: 'Descrição', flex: 1, headerAlign: 'center', align: 'center' },
   { field: 'type', headerName: '', width: 60, headerAlign: 'center', align: 'center' },
