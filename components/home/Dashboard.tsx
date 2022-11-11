@@ -1,9 +1,10 @@
 import { Box, MenuItem, Select, Typography } from "@mui/material";
 import { DataGrid, GridColumns } from "@mui/x-data-grid";
+import { GeneralContext } from "context/GeneralContext";
 import { Account, UserAccountsSWR, useUserAccounts } from "hooks/accounts-hooks";
 import { useCompanySettingsByFamily } from "hooks/settings-hooks";
 import { useUsersByFamily } from "hooks/users-hooks";
-import { useState } from "react";
+import { useContext } from "react";
 import { formatPriceToPtBRCurrency, separateNumberWithDots } from "utils/numbers-utils";
 
 const conditionsEnum = {
@@ -50,10 +51,10 @@ const buildMainHeaderData = (accounts: Account[], companiesSettings: any) => {
 };
 
 function Dashboard({ familyId, name }: { userId: string, familyId: string, name: string }) {
-  const [selectedAccount, setSelectedAccount] = useState(name);
+  const { selectedUserName, setSelectedUserName } = useContext(GeneralContext);
 
   const familyUsers = useUsersByFamily({ familyId, name });
-  const accounts = useUserAccounts({ userId: familyUsers.data?.users.find((user: any) => user.name === selectedAccount).id || '' });
+  const accounts = useUserAccounts({ userId: familyUsers.data?.users.find((user: any) => user.name === selectedUserName).id || '' });
   const companiesSettings = useCompanySettingsByFamily({ familyId });
 
   return (
@@ -94,8 +95,8 @@ function Dashboard({ familyId, name }: { userId: string, familyId: string, name:
       </Box>
       <Box m={2}>
         <Select
-          value={selectedAccount}
-          onChange={(event) => setSelectedAccount(event.target.value)}
+          value={selectedUserName}
+          onChange={(event) => setSelectedUserName(event.target.value)}
         >
           {familyUsers.data?.users.map(
             (user: any) => <MenuItem key={user.id} value={user.name}>{user.name}</MenuItem>)

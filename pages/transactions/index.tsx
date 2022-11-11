@@ -3,10 +3,12 @@ import { Box } from "@mui/system";
 import { DataGrid, GridColumns } from "@mui/x-data-grid";
 import Header from "components/core/Header";
 import TransactionsModal from "components/transactions/TransactionsModal";
+import { GeneralContext } from "context/GeneralContext";
 import { Transaction, useTransactions } from "hooks/transactions-hooks";
 import { useUsersByFamily } from "hooks/users-hooks";
 import { useSession } from "next-auth/react";
-import { useEffect, useState } from "react";
+import Signout from "pages/auth/signout";
+import { useContext, useState } from "react";
 import { formatDate } from "utils/date-utils";
 import { formatPriceToPtBRCurrency, separateNumberWithDots } from "utils/numbers-utils";
 import { getSerializedValuesFromSession } from "utils/session-utils";
@@ -34,26 +36,21 @@ const serializeTransactions = (transactionsFromApi: Transaction[]) => {
 
 function Transactions() {
   const session = useSession();
+  const { selectedUserName, setSelectedUserName } = useContext(GeneralContext);
   const { userId, familyId, name } = getSerializedValuesFromSession(session.data);
-  const [selectedAccount, setSelectedAccount] = useState('');
   const [openModal, setOpenModal] = useState(false);
   const familyUsers = useUsersByFamily({ familyId, name });
-  const transactions = useTransactions({ userId: familyUsers.data?.users.find((user: any) => user.name === selectedAccount)?.id || userId });
+  const transactions = useTransactions({ userId: familyUsers.data?.users.find((user: any) => user.name === selectedUserName)?.id || userId });
 
-  useEffect(() => {
-    if(session.status === 'authenticated') {
-      setSelectedAccount(name);
-    }
-  }, [session.status]);
-
-  if (session.status !== 'authenticated') return <h1>Usuário não autenticado</h1>;
+  if (session.status === 'loading') return <h1>Carregando...</h1>;
+  if (session.status === 'unauthenticated') return <Signout />;
   return(
     <>
       <Header title='Movimentações' name={name} />
       <Box width='100vw' display='flex' sx={{ justifyContent: 'space-between' }}>
         <Select
-          value={!!familyUsers.data ? selectedAccount : ''}
-          onChange={(event) => setSelectedAccount(event.target.value)}
+          value={!!familyUsers.data ? selectedUserName : ''}
+          onChange={(event) => setSelectedUserName(event.target.value)}
           sx={{ m: 2, ml: 4 }}
         >
           {familyUsers.data?.users.map(
@@ -77,7 +74,7 @@ function Transactions() {
       />
       <TransactionsModal
         open={openModal}
-        userId={familyUsers.data?.users.find((user: any) => user.name === selectedAccount)?.id || ''}
+        userId={familyUsers.data?.users.find((user: any) => user.name === selectedUserName)?.id || ''}
         setOpen={setOpenModal}
       />
     </>
