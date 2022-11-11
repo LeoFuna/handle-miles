@@ -1,7 +1,6 @@
-import { Button, MenuItem, Modal, Select } from "@mui/material";
-import { Box } from "@mui/system";
 import { DataGrid, GridColumns } from "@mui/x-data-grid";
 import Header from "components/core/Header";
+import SelectUserAndBtnCreate from "components/core/SelectUserAndBtnCreate";
 import TransactionsModal from "components/transactions/TransactionsModal";
 import { GeneralContext } from "context/GeneralContext";
 import { Transaction, useTransactions } from "hooks/transactions-hooks";
@@ -36,7 +35,7 @@ const serializeTransactions = (transactionsFromApi: Transaction[]) => {
 
 function Transactions() {
   const session = useSession();
-  const { selectedUserName, setSelectedUserName } = useContext(GeneralContext);
+  const { selectedUserName } = useContext(GeneralContext);
   const { userId, familyId, name } = getSerializedValuesFromSession(session.data);
   const [openModal, setOpenModal] = useState(false);
   const familyUsers = useUsersByFamily({ familyId, name });
@@ -46,25 +45,8 @@ function Transactions() {
   if (session.status === 'unauthenticated') return <Signout />;
   return(
     <>
-      <Header title='Movimentações' name={name} />
-      <Box width='100vw' display='flex' sx={{ justifyContent: 'space-between' }}>
-        <Select
-          value={!!familyUsers.data ? selectedUserName : ''}
-          onChange={(event) => setSelectedUserName(event.target.value)}
-          sx={{ m: 2, ml: 4 }}
-        >
-          {familyUsers.data?.users.map(
-            (user: any) => <MenuItem key={user.id} value={user.name}>{user.name}</MenuItem>)
-          }
-        </Select> 
-        <Button 
-          variant='contained' 
-          sx={{ m: 2, mr: 4, width: '120px', fontWeight: 'bolder', backgroundColor: 'gray' }}
-          onClick={ () => setOpenModal(true)}
-        >
-          Criar
-        </Button>
-      </Box>
+      <Header title='Movimentações' />
+      <SelectUserAndBtnCreate setOpenModal={setOpenModal} />
       <DataGrid
         autoHeight
         rows={serializeTransactions(transactions.data?.transactions || [])}

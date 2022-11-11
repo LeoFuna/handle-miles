@@ -12,7 +12,7 @@ type LoginUser = {
   password: string,
 }
 
-type User = {
+export type User = {
   id: string,
   name: string,
   familyId: string,

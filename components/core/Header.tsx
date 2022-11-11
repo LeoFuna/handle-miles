@@ -3,12 +3,16 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import { useState, MouseEvent } from "react";
 import { MenuBook } from "@mui/icons-material";
-import { signOut } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
+import { getSerializedValuesFromSession } from "utils/session-utils";
 
-function Header({ title = 'Visão Geral', name }: { title?: string; name: string }) {
+function Header({ title }: { title: string }) {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [userAnchorEl, setUserAnchorEl] = useState<null | HTMLElement>(null);
   const router = useRouter();
+  const session = useSession();
+
+  const { name } = getSerializedValuesFromSession(session.data);
 
   const handleOpenMenu = (event: MouseEvent<HTMLButtonElement>) => setAnchorEl(event.currentTarget);
   const handleUserOpenMenu = (event: MouseEvent<HTMLButtonElement>) => setUserAnchorEl(event.currentTarget);

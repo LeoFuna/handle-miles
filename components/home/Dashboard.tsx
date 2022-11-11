@@ -1,5 +1,6 @@
-import { Box, MenuItem, Select, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { DataGrid, GridColumns } from "@mui/x-data-grid";
+import UserSelectComponent from "components/core/UserSelectComponent";
 import { GeneralContext } from "context/GeneralContext";
 import { Account, UserAccountsSWR, useUserAccounts } from "hooks/accounts-hooks";
 import { useCompanySettingsByFamily } from "hooks/settings-hooks";
@@ -51,7 +52,7 @@ const buildMainHeaderData = (accounts: Account[], companiesSettings: any) => {
 };
 
 function Dashboard({ familyId, name }: { userId: string, familyId: string, name: string }) {
-  const { selectedUserName, setSelectedUserName } = useContext(GeneralContext);
+  const { selectedUserName } = useContext(GeneralContext);
 
   const familyUsers = useUsersByFamily({ familyId, name });
   const accounts = useUserAccounts({ userId: familyUsers.data?.users.find((user: any) => user.name === selectedUserName).id || '' });
@@ -94,14 +95,7 @@ function Dashboard({ familyId, name }: { userId: string, familyId: string, name:
         </Box>
       </Box>
       <Box m={2}>
-        <Select
-          value={selectedUserName}
-          onChange={(event) => setSelectedUserName(event.target.value)}
-        >
-          {familyUsers.data?.users.map(
-            (user: any) => <MenuItem key={user.id} value={user.name}>{user.name}</MenuItem>)
-          }
-        </Select>
+        <UserSelectComponent />
       </Box>
       <DataGrid
         autoHeight
