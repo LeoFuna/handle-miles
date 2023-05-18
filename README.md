@@ -10,6 +10,7 @@ Esse projeto tem o objetivo de gerar um sistema que auxilie o usuário a gerenci
 * [Estrutura do projeto](#estrutura-do-projeto)
 * [Staging](#staging)
 * [Produção](#produção)
+* [Imagens da Aplicação](#imagens-da-aplicação)
 
 ## Ambientes
 | Ambiente | URL |
@@ -75,3 +76,25 @@ _Essa branch é utilizada como gatilho para o ambiente de `staging` e não preci
 ## Produção
 
 O código será disponibilizado automaticamente em produção quando um commit for enviado para a branch `main`.
+
+## Imagens da Aplicação
+
+Tela de Login
+
+![image](https://github.com/LeoFuna/handle-miles/assets/80538553/e4d9d925-536d-43ce-8b52-4ce0066d49b0)
+
+Tela de Início
+
+![image](https://github.com/LeoFuna/handle-miles/assets/80538553/3bbe1c89-d43a-4cbd-86b4-b809eae6b60f)
+
+Menu de Opções
+
+![image](https://github.com/LeoFuna/handle-miles/assets/80538553/88a419c8-2b51-4c3f-988b-a5cdcdf09ac8)
+
+Tela de Movimentações
+
+![image](https://github.com/LeoFuna/handle-miles/assets/80538553/c004da9a-d784-4fa4-b22d-761e024d5aaa)
+
+Janela de Criar Movimentação
+
+![image](https://github.com/LeoFuna/handle-miles/assets/80538553/5cf495d6-f65c-422b-8abc-b438d8ccfa67)
