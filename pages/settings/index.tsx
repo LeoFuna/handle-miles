@@ -6,11 +6,11 @@ import { getSerializedValuesFromSession } from "utils/session-utils";
 
 function Settings () {
   const session = useSession();
-  const { familyId, name } = getSerializedValuesFromSession(session.data);
+  const { familyId } = getSerializedValuesFromSession(session.data);
   if (session.status !== 'authenticated') return (<Box>Carregando...</Box>);
   return (
     <>
-      <Header name={name} title='Configurações' />
+      <Header title='Configurações' />
       <SettingsPanel familyId={familyId} />
     </>
   );
